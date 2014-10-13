@@ -9,15 +9,6 @@
     <name>slimmer</name>
     <version>0.0.1-SNAPSHOT</version>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>net.sourceforge.owlapi</groupId>
-                <artifactId>owlapi-distribution</artifactId>
-                <version>4.0.0</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <pluginManagement>
@@ -27,8 +18,30 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.1</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.2</version>
+                    <inherited>true</inherited>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.4.1</version>
+                    <configuration>
+                      <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                      </descriptorRefs>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
   
+    <dependencies>
+    	<dependency>
+    		<groupId>net.sourceforge.owlapi</groupId>
+    		<artifactId>owlapi-distribution</artifactId>
+    		<version>3.5.0</version>
+    	</dependency>
+    </dependencies>
 </project>
