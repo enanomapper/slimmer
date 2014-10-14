@@ -13,6 +13,8 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
@@ -49,8 +51,28 @@ public class Slimmer {
 				Set<String> irisToSave = new HashSet<String>();
 				while (line != null) {
 					String iri = line.trim();
-					System.out.println("Extracting " + iri + "...");
-					irisToSave.add(iri);
+					if (iri.startsWith("U:")) {
+						// also all upper classes
+						iri = iri.substring(2);
+						System.out.println("Extracting " + iri + "...");
+						Set<OWLEntity> entities = onto.getEntitiesInSignature(IRI.create(iri));
+						if (entities.size() > 0) {
+							OWLEntity entity = entities.iterator().next();
+							if (entity instanceof OWLClass) {
+								OWLClass clazz = (OWLClass)entity;
+								System.out.println("Class " + clazz);
+								Set<String> superClasses = allSuperClasses(clazz, onto);
+								for (String superClass : superClasses) {
+									System.out.println("Extracting " + superClass + "...");
+									irisToSave.add(superClass);
+								}
+							}
+						}
+						irisToSave.add(iri);
+					} else {
+						System.out.println("Extracting " + iri + "...");
+						irisToSave.add(iri);
+					}
 					line = reader.readLine();
 				}
 				reader.close();
@@ -77,6 +99,20 @@ public class Slimmer {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private static Set<String> allSuperClasses(OWLClass clazz,
+			OWLOntology onto) {
+		Set<String> allSuperClasses = new HashSet<String>();
+		Set<OWLClassExpression> superClasses = clazz.getSuperClasses(onto);
+		for (OWLClassExpression superClass : superClasses) {
+			OWLClass superOwlClass = superClass.asOWLClass();
+			String superIri = superOwlClass.getIRI().toString();
+			allSuperClasses.add(superIri);
+			// recurse
+			allSuperClasses.addAll(allSuperClasses(superOwlClass, onto));
+		}
+		return allSuperClasses;
 	}
 
 }
