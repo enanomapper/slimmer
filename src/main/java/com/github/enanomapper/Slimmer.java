@@ -13,7 +13,6 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
@@ -70,7 +69,8 @@ public class Slimmer {
 				man.applyChanges(remover.getChanges());
 
 				// save in OWL/XML format
-				File output = File.createTempFile("saved_pizza", "owl");
+				String slimmedFilename = props.getProperty("slimmed");
+				File output = new File(slimmedFilename);
 				IRI documentIRI2 = IRI.create(output);
 				man.saveOntology(onto, new OWLXMLOntologyFormat(), documentIRI2);
 			} catch (Exception e) {

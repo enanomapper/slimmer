@@ -1,2 +1,3 @@
 owl=../BFO/default/bfo-1.1.owl
 iris=bfo.iris
+slimmed=../BFO/default/bfo-1.1-slim.owl
