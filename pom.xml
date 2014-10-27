@@ -43,5 +43,11 @@
     		<artifactId>owlapi-distribution</artifactId>
     		<version>3.5.0</version>
     	</dependency>
+    	<dependency>
+    		<groupId>junit</groupId>
+    		<artifactId>junit</artifactId>
+    		<scope>test</scope>
+    		<version>4.11</version>
+    	</dependency>
     </dependencies>
 </project>
