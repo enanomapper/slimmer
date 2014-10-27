@@ -3,6 +3,7 @@ package com.github.enanomapper;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.Reader;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +29,11 @@ public class Configuration {
 	}
 
 	public void read(File file) throws Exception {
-		BufferedReader reader = new BufferedReader(new FileReader(file));
+		read(new FileReader(file));
+	}
+
+	public void read(Reader file) throws Exception {
+		BufferedReader reader = new BufferedReader(file);
 		String line = reader.readLine();
 		while (line != null) {
 			String instruction = line.trim();
