@@ -53,7 +53,7 @@ public class Configuration {
 						throw new Exception("Invalid configuration input: expected ':' at position 3.");
 					}
 					startURI = 3;
-				} else if (upDownInstruct != 'D') {
+				} else if (upDownInstruct == 'D') {
 					scope = Instruction.Scope.DOWN;
 					if (instruction.charAt(2) != ':') {
 						reader.close();

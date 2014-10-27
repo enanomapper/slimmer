@@ -38,6 +38,14 @@ public class ConfigurationTest {
 	}
 
 	@Test
+	public void testDown() throws Exception {
+		String test = "+D:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+	}
+
+	@Test
 	public void testSingularemove() throws Exception {
 		String test = "-:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Configuration conf = new Configuration();
