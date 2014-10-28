@@ -69,7 +69,13 @@ public class Configuration {
 			}
 
 			String iri = instruction.substring(startURI);
-			Instruction ins = new Instruction(iri, scope);
+			int index = iri.indexOf(' ');
+			String comment = "";
+			if (index != -1) {
+				comment = iri.substring(index).trim();
+				iri = iri.substring(0, index);
+			}
+			Instruction ins = new Instruction(iri, scope, comment);
 			if (addRemoveInstruct == '+') {
 				irisToSave.add(ins);
 			} else {

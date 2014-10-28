@@ -156,4 +156,23 @@ public class SlimmerTest {
 		Assert.assertNotNull(ontology);
 		Assert.assertEquals(3, ontology.getClassesInSignature().size());
 	}
+
+	@Test
+	public void testDeleteDownWithComment() throws Exception {
+		String test = "+D:http://www.ifomis.org/bfo/1.1/snap#MaterialEntity Comment\n"
+				    + "-D:http://www.ifomis.org/bfo/1.1/snap#FiatObjectPart";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		Set<Instruction> irisToRemove = conf.getTreePartsToRemove();
+
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
+		Slimmer slimmer = new Slimmer(stream);
+		slimmer.removeAllExcept(irisToSave);
+		slimmer.removeAll(irisToRemove);
+		OWLOntology ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(3, ontology.getClassesInSignature().size());
+	}
 }

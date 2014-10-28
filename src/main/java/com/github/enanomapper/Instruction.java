@@ -10,10 +10,12 @@ public class Instruction {
 
 	private String uriString;
 	private Scope scope;
+	private String comment;
 	
-	public Instruction(String uriString, Scope scope) {
+	public Instruction(String uriString, Scope scope, String comment) {
 		this.uriString = uriString;
 		this.scope = scope;
+		this.comment = comment;
 	}
 
 	public String getUriString() {
@@ -22,6 +24,10 @@ public class Instruction {
 
 	public Scope getScope() {
 		return scope;
+	}
+
+	public String getComment() {
+		return comment;
 	}
 	
 }

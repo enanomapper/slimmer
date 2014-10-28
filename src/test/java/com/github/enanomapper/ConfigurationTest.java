@@ -16,6 +16,15 @@ public class ConfigurationTest {
 	}
 
 	@Test
+	public void testParsingWithComment() throws Exception {
+		String test = "+U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant Comment";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		Assert.assertEquals("Comment", conf.getTreePartsToSave().iterator().next().getComment());
+	}
+
+	@Test
 	public void testRemoveUp() throws Exception {
 		String test = "-U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Configuration conf = new Configuration();
