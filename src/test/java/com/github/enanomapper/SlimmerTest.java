@@ -33,7 +33,7 @@ public class SlimmerTest {
 		slimmer.removeAllExcept(irisToSave);
 		OWLOntology ontology = slimmer.getOntology();
 		Assert.assertNotNull(ontology);
-		Assert.assertNotSame(3, ontology.getClassesInSignature().size());
+		Assert.assertEquals(3, ontology.getClassesInSignature().size());
 	}
 
 	@Test
@@ -49,7 +49,7 @@ public class SlimmerTest {
 		slimmer.removeAllExcept(irisToSave);
 		OWLOntology ontology = slimmer.getOntology();
 		Assert.assertNotNull(ontology);
-		Assert.assertNotSame(1, ontology.getClassesInSignature().size());
+		Assert.assertEquals(1, ontology.getClassesInSignature().size());
 	}
 
 	@Test
@@ -65,6 +65,6 @@ public class SlimmerTest {
 		slimmer.removeAllExcept(irisToSave);
 		OWLOntology ontology = slimmer.getOntology();
 		Assert.assertNotNull(ontology);
-		Assert.assertNotSame(4, ontology.getClassesInSignature().size());
+		Assert.assertEquals(4, ontology.getClassesInSignature().size());
 	}
 }
