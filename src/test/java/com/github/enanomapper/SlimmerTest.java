@@ -6,6 +6,9 @@ import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
@@ -174,5 +177,55 @@ public class SlimmerTest {
 		OWLOntology ontology = slimmer.getOntology();
 		Assert.assertNotNull(ontology);
 		Assert.assertEquals(3, ontology.getClassesInSignature().size());
+	}
+
+	@Test
+	public void testMakeNewSubclassProperty() throws Exception {
+		String test = "+:http://www.ifomis.org/bfo/1.1#Entity\n"
+	                + "+(http://www.ifomis.org/bfo/1.1#Entity):http://www.ifomis.org/bfo/1.1/snap#MaterialEntity";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		Instruction instruction = irisToSave.iterator().next();
+		String baseClass = instruction.getUriString();
+
+		Assert.assertEquals(2, conf.getTreePartsToSave().size());
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
+		Slimmer slimmer = new Slimmer(stream);
+		slimmer.removeAllExcept(irisToSave);
+		OWLOntology ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(2, ontology.getClassesInSignature().size());
+		Set<OWLEntity> entities = ontology.getEntitiesInSignature(IRI.create(baseClass));
+		Assert.assertEquals(1, entities.size());
+		OWLEntity entity = entities.iterator().next();
+		Assert.assertTrue(entity.isOWLClass());
+		OWLClass owlClass = entity.asOWLClass();
+		Assert.assertEquals(1, owlClass.getSuperClasses(ontology).size());
+	}
+
+	@Test
+	public void testMakeNewSuperClassFromOtherOntology() throws Exception {
+		String test = "+(http://purl.obolibrary.org/obo/CHEBI_23367):http://www.ifomis.org/bfo/1.1/snap#MaterialEntity";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		Instruction instruction = irisToSave.iterator().next();
+		String baseClass = instruction.getUriString();
+
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
+		Slimmer slimmer = new Slimmer(stream);
+		slimmer.removeAllExcept(irisToSave);
+		OWLOntology ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(2, ontology.getClassesInSignature().size());
+		Set<OWLEntity> entities = ontology.getEntitiesInSignature(IRI.create(baseClass));
+		Assert.assertEquals(1, entities.size());
+		OWLEntity entity = entities.iterator().next();
+		Assert.assertTrue(entity.isOWLClass());
+		OWLClass owlClass = entity.asOWLClass();
+		Assert.assertEquals(1, owlClass.getSuperClasses(ontology).size());
+		// FIXME: properly test if rdf:subClassOf exists
 	}
 }

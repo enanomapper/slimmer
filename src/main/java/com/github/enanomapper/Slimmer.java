@@ -5,15 +5,20 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
+import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -88,7 +93,7 @@ public class Slimmer {
 		}
 	}
 
-	private void saveAs(File output) throws OWLOntologyStorageException {
+	public void saveAs(File output) throws OWLOntologyStorageException {
 		IRI documentIRI2 = IRI.create(output);
 		man.saveOntology(onto, new RDFXMLOntologyFormat(), documentIRI2);
 	}
@@ -141,6 +146,7 @@ public class Slimmer {
 
 	public void removeAllExcept(Set<Instruction> irisToSave) {
 		Set<String> singleIRIs = explode(irisToSave);
+		Map<String,String> newSuperClasses = getNewSuperClasses(irisToSave);
 		System.out.println("" + singleIRIs);
 
 		OWLEntityRemover remover = new OWLEntityRemover(
@@ -152,11 +158,33 @@ public class Slimmer {
 			if (!singleIRIs.contains(indIRI)) {
 				System.out.println("Remove: " + indIRI);
 				ind.accept(remover);
+			} else {
+				// OK, keep this one. But does it have a new super class?
+				if (newSuperClasses.containsKey(indIRI)) {
+					String newSuperClass = newSuperClasses.get(indIRI);
+					OWLDataFactory factory = man.getOWLDataFactory();
+					System.out.println("Super class: " + newSuperClass);
+					OWLClass superClass = factory.getOWLClass(IRI.create(newSuperClass));
+					OWLAxiom axiom = factory.getOWLSubClassOfAxiom(ind, superClass);
+					System.out.println("Adding super class axiom: " + axiom);
+					AddAxiom addAxiom = new AddAxiom(onto, axiom);
+					man.applyChange(addAxiom);
+				}
 			}
 		}
 		man.applyChanges(remover.getChanges());
 	}
 	
+	private Map<String, String> getNewSuperClasses(Set<Instruction> irisToSave) {
+		Map<String,String> newSuperClasses = new HashMap<String, String>();
+		for (Instruction instruction : irisToSave) {
+			if (instruction.getNewSuperClass() != null) {
+				newSuperClasses.put(instruction.getUriString(), instruction.getNewSuperClass());
+			}
+		}
+		return newSuperClasses;
+	}
+
 	public void removeAll(Set<Instruction> irisToRemove) {
 		Set<String> singleIRIs = explode(irisToRemove);
 		System.out.println("" + singleIRIs);
