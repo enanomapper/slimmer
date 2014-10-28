@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassAxiom;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -226,6 +227,7 @@ public class SlimmerTest {
 		Assert.assertTrue(entity.isOWLClass());
 		OWLClass owlClass = entity.asOWLClass();
 		Assert.assertEquals(1, owlClass.getSuperClasses(ontology).size());
-		// FIXME: properly test if rdf:subClassOf exists
+		Set<OWLClassAxiom> axioms = ontology.getAxioms(owlClass);
+		Assert.assertEquals("SubClassOf", axioms.iterator().next().getAxiomType().getName());
 	}
 }
