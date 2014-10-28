@@ -76,6 +76,8 @@ public class Slimmer {
 				// 3. remove everything except for what is defined by the instructions
 				Set<Instruction> irisToSave = config.getTreePartsToSave();
 				slimmer.removeAllExcept(irisToSave);
+				Set<Instruction> irisToRemove = config.getTreePartsToRemove();
+				slimmer.removeAll(irisToRemove);
 
 				// 4. save in OWL/XML format
 				File output = new File(slimmedFilename);
@@ -155,6 +157,24 @@ public class Slimmer {
 		man.applyChanges(remover.getChanges());
 	}
 	
+	public void removeAll(Set<Instruction> irisToRemove) {
+		Set<String> singleIRIs = explode(irisToRemove);
+		System.out.println("" + singleIRIs);
+
+		OWLEntityRemover remover = new OWLEntityRemover(
+			man, Collections.singleton(onto)
+		);
+		for (OWLClass ind : onto.getClassesInSignature()) {
+			String indIRI = ind.getIRI().toString();
+			System.out.println(indIRI);
+			if (singleIRIs.contains(indIRI)) {
+				System.out.println("Remove: " + indIRI);
+				ind.accept(remover);
+			}
+		}
+		man.applyChanges(remover.getChanges());
+	}
+
 	private Set<String> allSuperClasses(OWLClass clazz,
 			OWLOntology onto) {
 		Set<String> allSuperClasses = new HashSet<String>();
