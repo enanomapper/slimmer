@@ -91,9 +91,9 @@ public class Slimmer {
 		man.saveOntology(onto, new RDFXMLOntologyFormat(), documentIRI2);
 	}
 
-	public void removeAllExcept(Set<Instruction> irisToSave) {
-		Set<String> singleIRIsToSave = new HashSet<String>();
-		for (Instruction instruction : irisToSave) {
+	private Set<String> explode(Set<Instruction> instructions) {
+		Set<String> singleIRIs = new HashSet<String>();
+		for (Instruction instruction : instructions) {
 			String iri = instruction.getUriString();
 			if (instruction.getScope() == Instruction.Scope.UP) {
 				System.out.println("Extracting " + iri + "...");
@@ -106,11 +106,11 @@ public class Slimmer {
 						Set<String> superClasses = allSuperClasses(clazz, onto);
 						for (String superClass : superClasses) {
 							System.out.println("Extracting " + superClass + "...");
-							singleIRIsToSave.add(superClass);
+							singleIRIs.add(superClass);
 						}
 					}
 				}
-				singleIRIsToSave.add(iri);
+				singleIRIs.add(iri);
 			} else if (instruction.getScope() == Instruction.Scope.DOWN) {
 				System.out.println("Extracting " + iri + "...");
 				Set<OWLEntity> entities = onto.getEntitiesInSignature(IRI.create(iri));
@@ -122,18 +122,24 @@ public class Slimmer {
 						Set<String> subClasses = allSubClasses(clazz, onto);
 						for (String subClass : subClasses) {
 							System.out.println("Extracting " + subClass + "...");
-							singleIRIsToSave.add(subClass);
+							singleIRIs.add(subClass);
 						}
 					}
 				}
-				singleIRIsToSave.add(iri);
+				singleIRIs.add(iri);
 			} else if (instruction.getScope() == Instruction.Scope.SINGLE) {
 				System.out.println("Extracting " + iri + "...");
-				singleIRIsToSave.add(iri);
+				singleIRIs.add(iri);
 			} else {
 				System.out.println("Cannot handle this instruction: " + instruction.getScope());
 			}
 		}
+		return singleIRIs;
+	}
+
+	public void removeAllExcept(Set<Instruction> irisToSave) {
+		Set<String> singleIRIs = explode(irisToSave);
+		System.out.println("" + singleIRIs);
 
 		OWLEntityRemover remover = new OWLEntityRemover(
 			man, Collections.singleton(onto)
@@ -141,7 +147,7 @@ public class Slimmer {
 		for (OWLClass ind : onto.getClassesInSignature()) {
 			String indIRI = ind.getIRI().toString();
 			System.out.println(indIRI);
-			if (!irisToSave.contains(indIRI)) {
+			if (!singleIRIs.contains(indIRI)) {
 				System.out.println("Remove: " + indIRI);
 				ind.accept(remover);
 			}
