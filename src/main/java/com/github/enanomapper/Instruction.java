@@ -11,6 +11,7 @@ public class Instruction {
 	private String uriString;
 	private Scope scope;
 	private String comment;
+	private String newSuperClass;
 	
 	public Instruction(String uriString, Scope scope, String comment) {
 		this.uriString = uriString;
@@ -28,6 +29,14 @@ public class Instruction {
 
 	public String getComment() {
 		return comment;
+	}
+
+	public String getNewSuperClass() {
+		return newSuperClass;
+	}
+
+	public void setNewSuperClass(String newSuperClass) {
+		this.newSuperClass = newSuperClass;
 	}
 	
 }

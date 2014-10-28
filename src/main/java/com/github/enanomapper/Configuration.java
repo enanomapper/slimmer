@@ -44,8 +44,9 @@ public class Configuration {
 			}
 			char upDownInstruct = instruction.charAt(1);
 			Instruction.Scope scope = Instruction.Scope.SINGLE;
+			String newSuperClass = null;
 			int startURI = 2;
-			if (upDownInstruct != ':') {
+			if (upDownInstruct != ':' && upDownInstruct != '(') {
 				if (upDownInstruct == 'U') {
 					scope = Instruction.Scope.UP;
 					if (instruction.charAt(2) != ':') {
@@ -55,17 +56,26 @@ public class Configuration {
 					startURI = 3;
 				} else if (upDownInstruct == 'D') {
 					scope = Instruction.Scope.DOWN;
-					if (instruction.charAt(2) != ':') {
+					startURI = 3;
+					int indexCloseSuper = instruction.indexOf(')');
+					if (instruction.charAt(2) == '(' && indexCloseSuper != -1) {
+						newSuperClass = instruction.substring(3, indexCloseSuper);
+						startURI = indexCloseSuper + 2;
+					} else if (instruction.charAt(2) != ':') {
 						reader.close();
 						throw new Exception("Invalid configuration input: expected ':' at position 3.");
 					}
-					startURI = 3;
 				} else {
 					reader.close();
 					throw new Exception("Invalid configuration input: second instruction should be 'U', 'D', or empty.");
 				}
 			} else {
 				// OK, SINGLE
+				int indexCloseSuper = instruction.indexOf(')');
+				if (instruction.charAt(1) == '(' && indexCloseSuper != -1) {
+					newSuperClass = instruction.substring(2, indexCloseSuper);
+					startURI = indexCloseSuper + 2;
+				}
 			}
 
 			String iri = instruction.substring(startURI);
@@ -76,6 +86,7 @@ public class Configuration {
 				iri = iri.substring(0, index);
 			}
 			Instruction ins = new Instruction(iri, scope, comment);
+			if (newSuperClass != null) ins.setNewSuperClass(newSuperClass);
 			if (addRemoveInstruct == '+') {
 				irisToSave.add(ins);
 			} else {

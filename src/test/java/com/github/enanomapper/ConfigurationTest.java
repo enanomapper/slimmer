@@ -25,6 +25,24 @@ public class ConfigurationTest {
 	}
 
 	@Test
+	public void testParsingWithNewSuperClass() throws Exception {
+		String test = "+D(http://www.ifomis.org/bfo/1.1/snap#Entity):http://www.ifomis.org/bfo/1.1/snap#MaterialEntity";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#Entity", conf.getTreePartsToSave().iterator().next().getNewSuperClass());
+	}
+
+	@Test
+	public void testParsingSingleWithNewSuperClass() throws Exception {
+		String test = "+(http://www.ifomis.org/bfo/1.1/snap#Entity):http://www.ifomis.org/bfo/1.1/snap#MaterialEntity";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#Entity", conf.getTreePartsToSave().iterator().next().getNewSuperClass());
+	}
+
+	@Test
 	public void testRemoveUp() throws Exception {
 		String test = "-U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Configuration conf = new Configuration();
