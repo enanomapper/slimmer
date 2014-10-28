@@ -61,4 +61,14 @@ public class ConfigurationTest {
 		conf.read(new StringReader(test));
 		Assert.assertEquals(1, conf.getTreePartsToRemove().size());
 	}
+
+	@Test
+	public void testTwoLiner() throws Exception {
+		String test = "+U:http://www.ifomis.org/bfo/1.1/snap#MaterialEntity\n"
+				    + "-D:http://www.ifomis.org/bfo/1.1/snap#FiatObjectPart\n";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		Assert.assertEquals(1, conf.getTreePartsToRemove().size());
+	}
 }

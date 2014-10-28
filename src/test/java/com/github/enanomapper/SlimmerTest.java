@@ -69,9 +69,41 @@ public class SlimmerTest {
 	}
 
 	@Test
+	public void testKeepAll() throws Exception {
+		String test = "+D:http://www.ifomis.org/bfo/1.1#Entity";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
+		Slimmer slimmer = new Slimmer(stream);
+		slimmer.removeAllExcept(irisToSave);
+		OWLOntology ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(39, ontology.getClassesInSignature().size());
+	}
+
+	@Test
+	public void testParsingDownLeave() throws Exception {
+		String test = "+D:http://www.ifomis.org/bfo/1.1/snap#FiatObjectPart";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
+		Slimmer slimmer = new Slimmer(stream);
+		slimmer.removeAllExcept(irisToSave);
+		OWLOntology ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(1, ontology.getClassesInSignature().size());
+	}
+
+	@Test
 	public void testDeleteUp() throws Exception {
 		String test = "+U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant\n"
-				    + "-U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant\n";
+				    + "-U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
@@ -85,5 +117,43 @@ public class SlimmerTest {
 		OWLOntology ontology = slimmer.getOntology();
 		Assert.assertNotNull(ontology);
 		Assert.assertEquals(0, ontology.getClassesInSignature().size());
+	}
+
+	@Test
+	public void testKeepAllButOne() throws Exception {
+		String test = "+D:http://www.ifomis.org/bfo/1.1#Entity\n"
+				    + "-D:http://www.ifomis.org/bfo/1.1/snap#FiatObjectPart\n";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		Set<Instruction> irisToRemove = conf.getTreePartsToRemove();
+
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
+		Slimmer slimmer = new Slimmer(stream);
+		slimmer.removeAllExcept(irisToSave);
+		slimmer.removeAll(irisToRemove);
+		OWLOntology ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(38, ontology.getClassesInSignature().size());
+	}
+
+	@Test
+	public void testDeleteDown() throws Exception {
+		String test = "+D:http://www.ifomis.org/bfo/1.1/snap#MaterialEntity\n"
+				    + "-D:http://www.ifomis.org/bfo/1.1/snap#FiatObjectPart";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		Set<Instruction> irisToRemove = conf.getTreePartsToRemove();
+
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
+		Slimmer slimmer = new Slimmer(stream);
+		slimmer.removeAllExcept(irisToSave);
+		slimmer.removeAll(irisToRemove);
+		OWLOntology ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(3, ontology.getClassesInSignature().size());
 	}
 }
