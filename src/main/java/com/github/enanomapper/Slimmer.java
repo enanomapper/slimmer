@@ -3,6 +3,7 @@ package com.github.enanomapper;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
@@ -30,6 +31,11 @@ public class Slimmer {
 		onto = man.loadOntology(
 			IRI.create("file://" + owlFile.getAbsoluteFile())
 		);
+	}
+
+	public Slimmer(InputStream owlFile) throws OWLOntologyCreationException {
+		man = OWLManager.createOWLOntologyManager();
+		onto = man.loadOntologyFromOntologyDocument(owlFile);
 	}
 
 	public OWLOntology getOntology() {
