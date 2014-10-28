@@ -64,8 +64,15 @@ public class Slimmer {
 				Properties props = new Properties();
 				props.load(new FileReader(file));
 				String owlFilename = props.getProperty("owl"); // for step 1
+				if (owlFilename.contains("/")) {
+					owlFilename = owlFilename.substring(owlFilename.lastIndexOf('/')+1);
+				}
 				String iriFilename = props.getProperty("iris"); // for step 2,3
-				String slimmedFilename = props.getProperty("slimmed"); // for step 4
+				String slimmedURI = props.getProperty("slimmed"); // for step 4
+				String slimmedFilename = slimmedURI;
+				if (owlFilename.contains("/")) {
+					owlFilename = owlFilename.substring(owlFilename.lastIndexOf('/')+1);
+				}
 
 				// 1. read the original ontology
 				File owlFile = new File(owlFilename);
