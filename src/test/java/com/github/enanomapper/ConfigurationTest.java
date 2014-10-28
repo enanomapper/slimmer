@@ -15,6 +15,15 @@ public class ConfigurationTest {
 		Assert.assertEquals(1, conf.getTreePartsToSave().size());
 	}
 
+	@Test
+	public void testRemoveUp() throws Exception {
+		String test = "-U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Assert.assertEquals(0, conf.getTreePartsToSave().size());
+		Assert.assertEquals(1, conf.getTreePartsToRemove().size());
+	}
+
 	@Test(expected=Exception.class)
 	public void testMissingAdd() throws Exception {
 		String test = "U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
