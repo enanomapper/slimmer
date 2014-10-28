@@ -15,10 +15,26 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
 
 public class Slimmer {
+
+	private OWLOntologyManager man;
+	private OWLOntology onto;
+
+	public Slimmer(File owlFile) throws OWLOntologyCreationException {
+		man = OWLManager.createOWLOntologyManager();
+		onto = man.loadOntology(
+			IRI.create("file://" + owlFile.getAbsoluteFile())
+		);
+	}
+
+	public OWLOntology getOntology() {
+		return this.onto;
+	}
 
 	public static void main(String[] args) {
 		String rootFolder = args[0];
@@ -32,89 +48,102 @@ public class Slimmer {
 		for (File file : files) {
 			try {
 				System.out.println("Slimming for " + file.getName());
+
+				// read the information about the ontology to process
 				Properties props = new Properties();
 				props.load(new FileReader(file));
-				String owlFilename = props.getProperty("owl");
+				String owlFilename = props.getProperty("owl"); // for step 1
+				String iriFilename = props.getProperty("iris"); // for step 2,3
+				String slimmedFilename = props.getProperty("slimmed"); // for step 4
+
+				// 1. read the original ontology
 				File owlFile = new File(owlFilename);
-				OWLOntologyManager man = OWLManager.createOWLOntologyManager();
-				OWLOntology onto = man.loadOntology(
-					IRI.create("file://" + owlFile.getAbsoluteFile())
-				);
+				Slimmer slimmer = new Slimmer(owlFile);
+				OWLOntology onto = slimmer.getOntology();
 				System.out.println("Loaded axioms: " + onto.getAxiomCount());
 
-				String iriFilename = props.getProperty("iris");
+				// 2. read the configuration of what to keep/remove
 				File configFile = new File(rootFolder,iriFilename);
 				Configuration config = new Configuration();
 				config.read(configFile);
+
+				// 3. remove everything except for what is defined by the instructions
 				Set<Instruction> irisToSave = config.getTreePartsToSave();
-				Set<String> singleIRIsToSave = new HashSet<String>();
-				for (Instruction instruction : irisToSave) {
-					String iri = instruction.getUriString();
-					if (instruction.getScope() == Instruction.Scope.UP) {
-						System.out.println("Extracting " + iri + "...");
-						Set<OWLEntity> entities = onto.getEntitiesInSignature(IRI.create(iri));
-						if (entities.size() > 0) {
-							OWLEntity entity = entities.iterator().next();
-							if (entity instanceof OWLClass) {
-								OWLClass clazz = (OWLClass)entity;
-								System.out.println("Class " + clazz);
-								Set<String> superClasses = allSuperClasses(clazz, onto);
-								for (String superClass : superClasses) {
-									System.out.println("Extracting " + superClass + "...");
-									singleIRIsToSave.add(superClass);
-								}
-							}
-						}
-						singleIRIsToSave.add(iri);
-					} else if (instruction.getScope() == Instruction.Scope.DOWN) {
-						System.out.println("Extracting " + iri + "...");
-						Set<OWLEntity> entities = onto.getEntitiesInSignature(IRI.create(iri));
-						if (entities.size() > 0) {
-							OWLEntity entity = entities.iterator().next();
-							if (entity instanceof OWLClass) {
-								OWLClass clazz = (OWLClass)entity;
-								System.out.println("Class " + clazz);
-								Set<String> subClasses = allSubClasses(clazz, onto);
-								for (String subClass : subClasses) {
-									System.out.println("Extracting " + subClass + "...");
-									singleIRIsToSave.add(subClass);
-								}
-							}
-						}
-						singleIRIsToSave.add(iri);
-					} else if (instruction.getScope() == Instruction.Scope.SINGLE) {
-						System.out.println("Extracting " + iri + "...");
-						singleIRIsToSave.add(iri);
-					} else {
-						System.out.println("Cannot handle this instruction: " + instruction.getScope());
-					}
-				}
+				slimmer.removeAllExcept(irisToSave);
 
-				OWLEntityRemover remover = new OWLEntityRemover(
-					man, Collections.singleton(onto)
-				);
-				for (OWLClass ind : onto.getClassesInSignature()) {
-					String indIRI = ind.getIRI().toString();
-					System.out.println(indIRI);
-					if (!irisToSave.contains(indIRI)) {
-						System.out.println("Remove: " + indIRI);
-						ind.accept(remover);
-					}
-				}
-				man.applyChanges(remover.getChanges());
-
-				// save in OWL/XML format
-				String slimmedFilename = props.getProperty("slimmed");
+				// 4. save in OWL/XML format
 				File output = new File(slimmedFilename);
-				IRI documentIRI2 = IRI.create(output);
-				man.saveOntology(onto, new RDFXMLOntologyFormat(), documentIRI2);
+				slimmer.saveAs(output);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	private static Set<String> allSuperClasses(OWLClass clazz,
+	private void saveAs(File output) throws OWLOntologyStorageException {
+		IRI documentIRI2 = IRI.create(output);
+		man.saveOntology(onto, new RDFXMLOntologyFormat(), documentIRI2);
+	}
+
+	public void removeAllExcept(Set<Instruction> irisToSave) {
+		Set<String> singleIRIsToSave = new HashSet<String>();
+		for (Instruction instruction : irisToSave) {
+			String iri = instruction.getUriString();
+			if (instruction.getScope() == Instruction.Scope.UP) {
+				System.out.println("Extracting " + iri + "...");
+				Set<OWLEntity> entities = onto.getEntitiesInSignature(IRI.create(iri));
+				if (entities.size() > 0) {
+					OWLEntity entity = entities.iterator().next();
+					if (entity instanceof OWLClass) {
+						OWLClass clazz = (OWLClass)entity;
+						System.out.println("Class " + clazz);
+						Set<String> superClasses = allSuperClasses(clazz, onto);
+						for (String superClass : superClasses) {
+							System.out.println("Extracting " + superClass + "...");
+							singleIRIsToSave.add(superClass);
+						}
+					}
+				}
+				singleIRIsToSave.add(iri);
+			} else if (instruction.getScope() == Instruction.Scope.DOWN) {
+				System.out.println("Extracting " + iri + "...");
+				Set<OWLEntity> entities = onto.getEntitiesInSignature(IRI.create(iri));
+				if (entities.size() > 0) {
+					OWLEntity entity = entities.iterator().next();
+					if (entity instanceof OWLClass) {
+						OWLClass clazz = (OWLClass)entity;
+						System.out.println("Class " + clazz);
+						Set<String> subClasses = allSubClasses(clazz, onto);
+						for (String subClass : subClasses) {
+							System.out.println("Extracting " + subClass + "...");
+							singleIRIsToSave.add(subClass);
+						}
+					}
+				}
+				singleIRIsToSave.add(iri);
+			} else if (instruction.getScope() == Instruction.Scope.SINGLE) {
+				System.out.println("Extracting " + iri + "...");
+				singleIRIsToSave.add(iri);
+			} else {
+				System.out.println("Cannot handle this instruction: " + instruction.getScope());
+			}
+		}
+
+		OWLEntityRemover remover = new OWLEntityRemover(
+			man, Collections.singleton(onto)
+		);
+		for (OWLClass ind : onto.getClassesInSignature()) {
+			String indIRI = ind.getIRI().toString();
+			System.out.println(indIRI);
+			if (!irisToSave.contains(indIRI)) {
+				System.out.println("Remove: " + indIRI);
+				ind.accept(remover);
+			}
+		}
+		man.applyChanges(remover.getChanges());
+	}
+	
+	private Set<String> allSuperClasses(OWLClass clazz,
 			OWLOntology onto) {
 		Set<String> allSuperClasses = new HashSet<String>();
 		Set<OWLClassExpression> superClasses = clazz.getSuperClasses(onto);
@@ -128,7 +157,7 @@ public class Slimmer {
 		return allSuperClasses;
 	}
 
-	private static Set<String> allSubClasses(OWLClass clazz,
+	private Set<String> allSubClasses(OWLClass clazz,
 			OWLOntology onto) {
 		Set<String> allSubClasses = new HashSet<String>();
 		Set<OWLClassExpression> subClasses = clazz.getSubClasses(onto);
