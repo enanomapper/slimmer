@@ -1,1 +1,6 @@
-+U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant
++:http://purl.obolibrary.org/obo/BFO_0000001
++:http://purl.obolibrary.org/obo/BFO_0000040
++:http://purl.obolibrary.org/obo/BFO_0000007
++:http://purl.obolibrary.org/obo/BFO_0000019
++D:http://purl.obolibrary.org/obo/BFO_0000016
++:http://purl.obolibrary.org/obo/BFO_0000023
