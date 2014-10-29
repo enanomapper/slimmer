@@ -20,10 +20,12 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLImportsDeclaration;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import org.semanticweb.owlapi.model.RemoveImport;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
 
 public class Slimmer {
@@ -67,7 +69,7 @@ public class Slimmer {
 					owlFilename = owlFilename.substring(owlFilename.lastIndexOf('/')+1);
 				}
 				String iriFilename = props.getProperty("iris"); // for step 2,3
-				String slimmedURI = props.getProperty("slimmed"); // for step 4
+				String slimmedURI = props.getProperty("slimmed"); // for step 5
 				String slimmedFilename = slimmedURI;
 				if (slimmedFilename.contains("/")) {
 					slimmedFilename = slimmedFilename.substring(slimmedFilename.lastIndexOf('/')+1);
@@ -90,7 +92,15 @@ public class Slimmer {
 				Set<Instruction> irisToRemove = config.getTreePartsToRemove();
 				slimmer.removeAll(irisToRemove);
 
-				// 4. save in OWL/XML format
+				// 4. remove owl:imports
+				Set<OWLImportsDeclaration> importDeclarations = onto.getImportsDeclarations();
+				for (OWLImportsDeclaration declaration : importDeclarations) {
+					System.out.println("Removing imports: " + declaration.getIRI());
+					RemoveImport removeImport = new RemoveImport(onto, declaration);
+					slimmer.man.applyChange(removeImport);
+				}
+
+				// 5. save in OWL/XML format
 				slimmer.man.setOntologyDocumentIRI(onto, IRI.create(slimmedURI));
 				File output = new File(slimmedFilename);
 				System.out.println("Saving to: " + output.getAbsolutePath());
