@@ -93,6 +93,7 @@ public class Slimmer {
 				// 4. save in OWL/XML format
 				slimmer.man.setOntologyDocumentIRI(onto, IRI.create(slimmedURI));
 				File output = new File(slimmedFilename);
+				System.out.println("Saving to: " + output.getAbsolutePath());
 				slimmer.saveAs(output);
 			} catch (Exception e) {
 				e.printStackTrace();
