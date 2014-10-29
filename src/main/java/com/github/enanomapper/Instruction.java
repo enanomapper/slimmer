@@ -38,5 +38,19 @@ public class Instruction {
 	public void setNewSuperClass(String newSuperClass) {
 		this.newSuperClass = newSuperClass;
 	}
-	
+
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		if (scope == Scope.SINGLE) {}
+		else if (scope == Scope.UP) { buffer.append("U"); }
+		else if (scope == Scope.UP) { buffer.append("D"); }
+		if (newSuperClass != null) {
+			buffer.append('(').append(newSuperClass).append(')');
+		}
+		buffer.append(':').append(this.uriString);
+		if (comment != null) {
+			buffer.append(' ').append(comment);
+		}
+		return buffer.toString();
+	}
 }
