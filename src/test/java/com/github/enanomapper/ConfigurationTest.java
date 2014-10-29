@@ -1,6 +1,8 @@
 package com.github.enanomapper;
 
 import java.io.StringReader;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -44,6 +46,31 @@ public class ConfigurationTest {
 		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity", instruction.getUriString());
 	}
 
+	@Test
+	public void testMakeNewSubclassProperty() throws Exception {
+		String test = "+:http://www.ifomis.org/bfo/1.1#Entity\n"
+	                + "+(http://www.ifomis.org/bfo/1.1#Entity):http://www.ifomis.org/bfo/1.1/snap#MaterialEntity";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		Iterator<Instruction> iter = irisToSave.iterator();
+		Instruction instruction1 = iter.next(); System.out.println(instruction1);
+		Instruction instruction2 = iter.next(); System.out.println(instruction2);
+		if (instruction1.getUriString().endsWith("MaterialEntity")) {
+			Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity", instruction1.getUriString());
+			Assert.assertNotNull(instruction1.getNewSuperClass());
+			Assert.assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction1.getNewSuperClass());
+			Assert.assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction2.getUriString());
+			Assert.assertNull(instruction2.getNewSuperClass());
+		} else {
+			Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity", instruction2.getUriString());
+			Assert.assertNotNull(instruction2.getNewSuperClass());
+			Assert.assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction2.getNewSuperClass());
+			Assert.assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction1.getUriString());
+			Assert.assertNull(instruction1.getNewSuperClass());
+		}
+	}
+	
 	@Test
 	public void testRemoveUp() throws Exception {
 		String test = "-U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
