@@ -2,6 +2,7 @@ package com.github.enanomapper;
 
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -187,7 +188,9 @@ public class SlimmerTest {
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
-		Instruction instruction = irisToSave.iterator().next();
+		Iterator<Instruction> instructions = irisToSave.iterator();
+		Instruction instruction = instructions.next();
+		if (!instruction.getUriString().endsWith("MaterialEntity")) instruction = instructions.next();
 		String baseClass = instruction.getUriString();
 
 		Assert.assertEquals(2, conf.getTreePartsToSave().size());
@@ -203,6 +206,7 @@ public class SlimmerTest {
 		Assert.assertTrue(entity.isOWLClass());
 		OWLClass owlClass = entity.asOWLClass();
 		Set<OWLClassAxiom> axioms = ontology.getAxioms(owlClass);
+		Assert.assertEquals(1, axioms.size());
 		Assert.assertEquals("SubClassOf", axioms.iterator().next().getAxiomType().getName());
 	}
 
