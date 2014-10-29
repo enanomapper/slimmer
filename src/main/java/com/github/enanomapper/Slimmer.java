@@ -46,7 +46,6 @@ public class Slimmer {
 	public OWLOntology getOntology() {
 		return this.onto;
 	}
-
 	public static void main(String[] args) {
 		String rootFolder = args[0];
 		System.out.println("Searching configuration files in " + rootFolder);
@@ -92,6 +91,7 @@ public class Slimmer {
 				slimmer.removeAll(irisToRemove);
 
 				// 4. save in OWL/XML format
+				slimmer.man.setOntologyDocumentIRI(onto, IRI.create(slimmedURI));
 				File output = new File(slimmedFilename);
 				slimmer.saveAs(output);
 			} catch (Exception e) {
