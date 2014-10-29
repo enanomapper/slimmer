@@ -17,6 +17,7 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -62,7 +63,10 @@ public class Slimmer {
 			OWLOntologyMerger merger = new OWLOntologyMerger(man);
 			onto = merger.createMergedOntology(man, IRI.create(mergedOntologyIRI));
 			for (OWLOntology ontology : man.getOntologies()) {
-				System.out.println("  copying axioms: " + ontology.getAnnotations().toArray()[0]);
+				System.out.println("  Copying annotations from " + ontology.getOntologyID());
+				for (OWLAnnotation annotation : ontology.getAnnotations()) {
+					System.out.println("  copying annotation: " + annotation.getProperty() + " -> " + annotation.getValue());
+				}
 			}
 		}
 	}
