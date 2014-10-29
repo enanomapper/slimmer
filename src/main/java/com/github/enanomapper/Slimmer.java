@@ -28,17 +28,30 @@ import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.RemoveImport;
 import org.semanticweb.owlapi.model.SetOntologyID;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
+import org.semanticweb.owlapi.util.OWLOntologyMerger;
 
 public class Slimmer {
 
 	private OWLOntologyManager man;
 	private OWLOntology onto;
 
-	public Slimmer(File owlFile) throws OWLOntologyCreationException {
+	public Slimmer(File owlFile, String mergedOntologyIRI) throws OWLOntologyCreationException {
 		man = OWLManager.createOWLOntologyManager();
 		onto = man.loadOntology(
 			IRI.create("file://" + owlFile.getAbsoluteFile())
 		);
+		Set<OWLImportsDeclaration> importDeclarations = onto.getImportsDeclarations();
+		for (OWLImportsDeclaration declaration : importDeclarations) {
+			try {
+				man.loadOntology(declaration.getIRI());
+				System.out.println("Loaded imported ontology: " + declaration.getIRI());
+			} catch (Exception exception) {
+				System.out.println("Failed to load imported ontology: " + declaration.getIRI());
+			}
+		}
+		// Merge all of the loaded ontologies, specifying an IRI for the new ontology
+		OWLOntologyMerger merger = new OWLOntologyMerger(man);
+		onto = merger.createMergedOntology(man, IRI.create(mergedOntologyIRI));
 	}
 
 	public Slimmer(InputStream owlFile) throws OWLOntologyCreationException {
@@ -78,7 +91,7 @@ public class Slimmer {
 
 				// 1. read the original ontology
 				File owlFile = new File(owlFilename);
-				Slimmer slimmer = new Slimmer(owlFile);
+				Slimmer slimmer = new Slimmer(owlFile, slimmedFilename);
 				OWLOntology onto = slimmer.getOntology();
 				System.out.println("Loaded axioms: " + onto.getAxiomCount());
 
