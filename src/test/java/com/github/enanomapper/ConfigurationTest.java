@@ -39,7 +39,9 @@ public class ConfigurationTest {
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
 		Assert.assertEquals(1, conf.getTreePartsToSave().size());
-		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#Entity", conf.getTreePartsToSave().iterator().next().getNewSuperClass());
+		Instruction instruction = conf.getTreePartsToSave().iterator().next();
+		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#Entity", instruction.getNewSuperClass());
+		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity", instruction.getUriString());
 	}
 
 	@Test
