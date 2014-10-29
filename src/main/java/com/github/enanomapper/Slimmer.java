@@ -26,6 +26,7 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.RemoveImport;
+import org.semanticweb.owlapi.model.SetOntologyID;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
 
 public class Slimmer {
@@ -101,7 +102,8 @@ public class Slimmer {
 				}
 
 				// 5. save in OWL/XML format
-				slimmer.man.setOntologyDocumentIRI(onto, IRI.create(slimmedURI));
+				SetOntologyID ontologyIDChange = new SetOntologyID(onto, IRI.create(slimmedURI));
+				slimmer.man.applyChange(ontologyIDChange);
 				File output = new File(slimmedFilename);
 				System.out.println("Saving to: " + output.getAbsolutePath());
 				slimmer.saveAs(output);
