@@ -69,8 +69,8 @@ public class Slimmer {
 				String iriFilename = props.getProperty("iris"); // for step 2,3
 				String slimmedURI = props.getProperty("slimmed"); // for step 4
 				String slimmedFilename = slimmedURI;
-				if (owlFilename.contains("/")) {
-					owlFilename = owlFilename.substring(owlFilename.lastIndexOf('/')+1);
+				if (slimmedFilename.contains("/")) {
+					slimmedFilename = owlFilename.substring(owlFilename.lastIndexOf('/')+1);
 				}
 
 				// 1. read the original ontology
