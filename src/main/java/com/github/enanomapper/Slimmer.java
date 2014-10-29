@@ -70,7 +70,7 @@ public class Slimmer {
 				String slimmedURI = props.getProperty("slimmed"); // for step 4
 				String slimmedFilename = slimmedURI;
 				if (slimmedFilename.contains("/")) {
-					slimmedFilename = owlFilename.substring(owlFilename.lastIndexOf('/')+1);
+					slimmedFilename = slimmedFilename.substring(slimmedFilename.lastIndexOf('/')+1);
 				}
 
 				// 1. read the original ontology
