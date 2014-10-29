@@ -16,6 +16,7 @@ import java.util.Set;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.AddAxiom;
+import org.semanticweb.owlapi.model.AddOntologyAnnotation;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -66,6 +67,8 @@ public class Slimmer {
 				System.out.println("  Copying annotations from " + ontology.getOntologyID());
 				for (OWLAnnotation annotation : ontology.getAnnotations()) {
 					System.out.println("  copying annotation: " + annotation.getProperty() + " -> " + annotation.getValue());
+					AddOntologyAnnotation annotationAdd = new AddOntologyAnnotation(onto, annotation);
+					man.applyChange(annotationAdd);
 				}
 			}
 		}
