@@ -1,2 +1,6 @@
 +(http://purl.obolibrary.org/obo/BFO_0000034):http://purl.bioontology.org/ontology/npo#NPO_1628 alkylating function
 +(http://purl.obolibrary.org/obo/BFO_0000016):http://purl.bioontology.org/ontology/npo#NPO_732 amphiphilic
++(http://purl.obolibrary.org/obo/BFO_0000016):http://purl.bioontology.org/ontology/npo#NPO_938 biocompatible
++(http://purl.obolibrary.org/obo/BFO_0000016):http://purl.bioontology.org/ontology/npo#NPO_191 biodegradable
++D(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.bioontology.org/ontology/npo#NPO_821 polydispersity
++D(http://purl.obolibrary.org/obo/IAO_0000030):http://purl.bioontology.org/ontology/npo#NPO_1779 datum value
