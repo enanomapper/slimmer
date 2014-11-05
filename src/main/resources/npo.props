@@ -1,0 +1,3 @@
+owl=http://raw.githubusercontent.com/enanomapper/npo/master/npo-asserted.owl
+iris=npo.iris
+slimmed=http://purl.enanomapper.org/onto/external/npo-slim.owl
