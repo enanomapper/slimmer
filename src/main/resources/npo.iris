@@ -18,3 +18,5 @@
 +D(http://purl.obolibrary.org/obo/BFO_0000040):http://purl.bioontology.org/ontology/npo#NPO_1597 fiat material part
 -D:http://purl.org/obo/owl/CHEBI#CHEBI_24433 group
 +D(http://purl.obolibrary.org/obo/BFO_0000040):http://purl.bioontology.org/ontology/npo#NPO_1436 instrument
++D(http://purl.obolibrary.org/obo/IAO_0000030):http://purl.bioontology.org/ontology/npo#NPO_1680 parameter
++(http://purl.obolibrary.org/obo/BFO_0000016):http://purl.bioontology.org/ontology/npo#NPO_1529 bioavailability
