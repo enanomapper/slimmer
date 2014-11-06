@@ -10,3 +10,6 @@
 +D(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.bioontology.org/ontology/npo#NPO_1914 hydrodynamic size
 +D(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.bioontology.org/ontology/npo#NPO_888 physical state
 +D(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.bioontology.org/ontology/npo#NPO_274 shape
++(http://purl.obolibrary.org/obo/PATO_0000033):http://purl.bioontology.org/ontology/npo#NPO_1193 cell concentration
++(http://purl.obolibrary.org/obo/PATO_0000033):http://purl.bioontology.org/ontology/npo#NPO_1830 particle concentration
++D(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.bioontology.org/ontology/npo#NPO_1694 particle size
