@@ -38,7 +38,11 @@ public class Configuration {
 		int lineNumber = 1;
 		while (line != null) {
 			String instruction = line.trim();
-			if (instruction.length() == 0) continue; // skip empty lines
+			if (instruction.length() == 0) {
+				line = reader.readLine();
+				lineNumber++;
+				continue; // skip empty lines
+			}
 
 			char addRemoveInstruct = instruction.charAt(0);
 			if (addRemoveInstruct != '+' && addRemoveInstruct != '-') {
