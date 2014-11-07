@@ -39,9 +39,10 @@ public class Configuration {
 		while (line != null) {
 			String instruction = line.trim();
 			if (instruction.length() == 0) {
+				System.out.println("Skipping an unexpected empty line at line " + lineNumber);
 				line = reader.readLine();
 				lineNumber++;
-				continue; // skip empty lines
+				continue;
 			}
 
 			char addRemoveInstruct = instruction.charAt(0);
