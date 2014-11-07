@@ -35,12 +35,15 @@ public class Configuration {
 	public void read(Reader file) throws Exception {
 		BufferedReader reader = new BufferedReader(file);
 		String line = reader.readLine();
+		int lineNumber = 1;
 		while (line != null) {
 			String instruction = line.trim();
+			if (instruction.length() == 0) continue; // skip empty lines
+
 			char addRemoveInstruct = instruction.charAt(0);
 			if (addRemoveInstruct != '+' && addRemoveInstruct != '-') {
 				reader.close();
-				throw new Exception("Invalid configuration input: first character should be '+' or '-'.");
+				throw new Exception("Invalid configuration input at line " + lineNumber + ": first character should be '+' or '-'.");
 			}
 			char upDownInstruct = instruction.charAt(1);
 			Instruction.Scope scope = Instruction.Scope.SINGLE;
@@ -51,7 +54,7 @@ public class Configuration {
 					scope = Instruction.Scope.UP;
 					if (instruction.charAt(2) != ':') {
 						reader.close();
-						throw new Exception("Invalid configuration input: expected ':' at position 3.");
+						throw new Exception("Invalid configuration input at line " + lineNumber + ": expected ':' at position 3.");
 					}
 					startURI = 3;
 				} else if (upDownInstruct == 'D') {
@@ -63,11 +66,11 @@ public class Configuration {
 						startURI = indexCloseSuper + 2;
 					} else if (instruction.charAt(2) != ':') {
 						reader.close();
-						throw new Exception("Invalid configuration input: expected ':' at position 3.");
+						throw new Exception("Invalid configuration input at line " + lineNumber + ": expected ':' at position 3.");
 					}
 				} else {
 					reader.close();
-					throw new Exception("Invalid configuration input: second instruction should be 'U', 'D', or empty.");
+					throw new Exception("Invalid configuration input at line " + lineNumber + ": second instruction should be 'U', 'D', or empty.");
 				}
 			} else {
 				// OK, SINGLE
@@ -94,6 +97,7 @@ public class Configuration {
 			}
 			
 			line = reader.readLine();
+			lineNumber++;
 		}
 		reader.close();
 	}
