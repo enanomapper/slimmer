@@ -113,7 +113,12 @@ public class Slimmer {
 				// 2. read the configuration of what to keep/remove
 				File configFile = new File(rootFolder,iriFilename);
 				Configuration config = new Configuration();
-				config.read(configFile);
+				try {
+					config.read(configFile);
+				} catch (Exception exception) {
+					System.out.println("Error while reading the config file: " + exception.getMessage());
+					System.exit(-1);
+				}
 
 				// 3. remove everything except for what is defined by the instructions
 				Set<Instruction> irisToSave = config.getTreePartsToSave();
