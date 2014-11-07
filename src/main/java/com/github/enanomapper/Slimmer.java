@@ -114,6 +114,7 @@ public class Slimmer {
 				File configFile = new File(rootFolder,iriFilename);
 				Configuration config = new Configuration();
 				try {
+					System.out.println("Reading config file: " + configFile);
 					config.read(configFile);
 				} catch (Exception exception) {
 					System.out.println("Error while reading the config file: " + exception.getMessage());
