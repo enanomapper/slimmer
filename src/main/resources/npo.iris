@@ -22,4 +22,5 @@
 +(http://purl.obolibrary.org/obo/BFO_0000016):http://purl.bioontology.org/ontology/npo#NPO_1529 bioavailability
 +D(http://purl.obolibrary.org/obo/BFO_0000007):http://purl.bioontology.org/ontology/npo#NPO_1944 synthesis part
 +D(http://purl.obolibrary.org/obo/BFO_0000016):http://purl.bioontology.org/ontology/npo#NPO_1338 toxicity
-
+-http://purl.bioontology.org/ontology/npo#NPO_1196 LC-50 
+-http://purl.bioontology.org/ontology/npo#NPO_1195 IC50 
