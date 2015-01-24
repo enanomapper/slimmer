@@ -33,6 +33,7 @@ import org.semanticweb.owlapi.model.RemoveImport;
 import org.semanticweb.owlapi.model.SetOntologyID;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
 import org.semanticweb.owlapi.util.OWLOntologyMerger;
+import org.semanticweb.owlapi.util.SimpleIRIMapper;
 
 public class Slimmer {
 
@@ -49,6 +50,10 @@ public class Slimmer {
 
 	public Slimmer(InputStream owlFile, String mergedOntologyIRI) throws OWLOntologyCreationException {
 		man = OWLManager.createOWLOntologyManager();
+		if (System.getProperty("ROOT") != null) {
+			String root = System.getProperty("ROOT");
+			addMappings(man, root);
+		}
 		onto = man.loadOntologyFromOntologyDocument(owlFile);
 		if (mergedOntologyIRI != null) {
 			Set<OWLImportsDeclaration> importDeclarations = onto.getImportsDeclarations();
@@ -283,6 +288,20 @@ public class Slimmer {
 			allSubClasses.addAll(allSubClasses(subOwlClass, onto));
 		}
 		return allSubClasses;
+	}
+
+	@SuppressWarnings("serial")
+	Map<String,String> mappings = new HashMap<String,String>() {{
+		put("http://purl.obolibrary.org/obo/oae/RO_dev_import", "OAE/RO_dev_import.owl");
+	}};
+
+	private void addMappings(OWLOntologyManager m, String root) {
+		for (String ontoIRI : mappings.keySet()) {
+			String localPart = mappings.get(ontoIRI);
+			m.addIRIMapper(new SimpleIRIMapper(
+				IRI.create(ontoIRI), IRI.create("file://" + root + localPart)
+		    ));
+		}
 	}
 
 }
