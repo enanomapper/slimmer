@@ -297,6 +297,7 @@ public class Slimmer {
 	}};
 
 	private void addMappings(OWLOntologyManager m, String root) {
+		if (!root.endsWith("/")) root = root + "/";
 		for (String ontoIRI : mappings.keySet()) {
 			String localPart = mappings.get(ontoIRI);
 			m.addIRIMapper(new SimpleIRIMapper(
