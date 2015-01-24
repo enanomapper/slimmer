@@ -50,8 +50,8 @@ public class Slimmer {
 
 	public Slimmer(InputStream owlFile, String mergedOntologyIRI) throws OWLOntologyCreationException {
 		man = OWLManager.createOWLOntologyManager();
-		if (System.getProperty("ROOT") != null) {
-			String root = System.getProperty("ROOT");
+		if (System.getProperty("WORKSPACE") != null) {
+			String root = System.getProperty("WORKSPACE");
 			addMappings(man, root);
 		}
 		onto = man.loadOntologyFromOntologyDocument(owlFile);
@@ -292,7 +292,7 @@ public class Slimmer {
 
 	@SuppressWarnings("serial")
 	Map<String,String> mappings = new HashMap<String,String>() {{
-		put("http://purl.obolibrary.org/obo/oae/RO_dev_import", "OAE/RO_dev_import.owl");
+		put("http://purl.obolibrary.org/obo/oae/RO_dev_import", "RO_dev_import.owl");
 	}};
 
 	private void addMappings(OWLOntologyManager m, String root) {
@@ -301,6 +301,7 @@ public class Slimmer {
 			m.addIRIMapper(new SimpleIRIMapper(
 				IRI.create(ontoIRI), IRI.create("file://" + root + localPart)
 		    ));
+			System.out.println("Added: " + IRI.create("file://" + root + localPart));
 		}
 	}
 
