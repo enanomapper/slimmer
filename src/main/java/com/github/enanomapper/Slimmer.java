@@ -50,8 +50,9 @@ public class Slimmer {
 
 	public Slimmer(InputStream owlFile, String mergedOntologyIRI) throws OWLOntologyCreationException {
 		man = OWLManager.createOWLOntologyManager();
-		if (System.getProperty("WORKSPACE") != null) {
-			String root = System.getProperty("WORKSPACE");
+		if (System.getenv("WORKSPACE") != null) {
+			String root = System.getenv("WORKSPACE");
+			System.out.println("Adding mappings with root: " + root);
 			addMappings(man, root);
 		}
 		onto = man.loadOntologyFromOntologyDocument(owlFile);
@@ -301,7 +302,7 @@ public class Slimmer {
 			m.addIRIMapper(new SimpleIRIMapper(
 				IRI.create(ontoIRI), IRI.create("file://" + root + localPart)
 		    ));
-			System.out.println("Added: " + IRI.create("file://" + root + localPart));
+			System.out.println("  added: " + IRI.create("file://" + root + localPart));
 		}
 	}
 
