@@ -13,8 +13,8 @@
 +(http://purl.obolibrary.org/obo/PATO_0000033):http://purl.bioontology.org/ontology/npo#NPO_1193 cell concentration
 +(http://purl.obolibrary.org/obo/PATO_0000033):http://purl.bioontology.org/ontology/npo#NPO_1830 particle concentration
 +D(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.bioontology.org/ontology/npo#NPO_1694 particle size
-+D(http://purl.obolibrary.org/obo/BFO_0000040):http://purl.bioontology.org/ontology/npo#NPO_199 nanomaterial
-+D(http://purl.obolibrary.org/obo/BFO_0000040):http://purl.bioontology.org/ontology/npo#NPO_1895 particle
++D(http://purl.obolibrary.org/obo/CHEBI_59999):http://purl.bioontology.org/ontology/npo#NPO_199 nanomaterial
++D(http://purl.obolibrary.org/obo/CHEBI_23367):http://purl.bioontology.org/ontology/npo#NPO_1895 particle
 +D(http://purl.obolibrary.org/obo/BFO_0000040):http://purl.bioontology.org/ontology/npo#NPO_1597 fiat material part
 -D:http://purl.org/obo/owl/CHEBI#CHEBI_24433 group
 +D(http://purl.obolibrary.org/obo/BFO_0000040):http://purl.bioontology.org/ontology/npo#NPO_1436 instrument
