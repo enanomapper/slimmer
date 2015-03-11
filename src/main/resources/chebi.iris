@@ -3,4 +3,8 @@
 +(http://purl.obolibrary.org/obo/BFO_0000040):http://purl.obolibrary.org/obo/CHEBI_23367 molecular entity
 +(http://purl.obolibrary.org/obo/BFO_0000040):http://purl.obolibrary.org/obo/CHEBI_59999 chemical substance
 -:http://purl.obolibrary.org/obo/CHEBI_50825 gold nanoparticle
+-:http://purl.obolibrary.org/obo/CHEBI_50836 zinc oxide nanoparticle
+-:http://purl.obolibrary.org/obo/CHEBI_50822 iron oxide nanoparticle
+-:http://purl.obolibrary.org/obo/CHEBI_50826 silver nanoparticle
+-:http://purl.obolibrary.org/obo/CHEBI_52522 bimetallic nanoparticle
 
