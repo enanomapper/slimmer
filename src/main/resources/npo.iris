@@ -26,3 +26,5 @@
 -D:http://purl.bioontology.org/ontology/npo#NPO_1196 LC-50 
 -D:http://purl.bioontology.org/ontology/npo#NPO_1195 IC50 
 +D(http://purl.obolibrary.org/obo/OBI_0000070):http://purl.bioontology.org/ontology/npo#NPO_1405 technique
+-:http://purl.bioontology.org/ontology/npo#NPO_1536 inorganic nanoparticle 
+
