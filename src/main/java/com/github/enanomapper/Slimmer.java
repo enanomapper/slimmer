@@ -143,7 +143,29 @@ public class Slimmer {
 					slimmer.man.applyChange(removeImport);
 				}
 
-				// 5. save in OWL/XML format
+				// 5. update descriptions and labels
+				Set<OWLClass> entities = onto.getClassesInSignature();
+				for (OWLClass clazz : entities) {
+					for (OWLAnnotation annot : clazz.getAnnotations(onto)) {
+						if (annot.getProperty().getIRI().toString().equals("http://purl.obolibrary.org/obo/IAO_0000115")) {
+							System.out.println("  xx description: " + annot.getValue());
+							OWLDataFactory factory = slimmer.man.getOWLDataFactory();
+							OWLAnnotationProperty newDescription =
+								factory.getOWLAnnotationProperty(IRI.create("http://purl.foo.org/obo/IAO_0000115"));
+							OWLAnnotation commentAnno = factory.getOWLAnnotation(
+								newDescription,
+								factory.getOWLLiteral(annot.getValue().toString(), "en")
+							);
+							System.out.println("  new description: " + commentAnno);
+							OWLAxiom ax = factory.getOWLAnnotationAssertionAxiom(
+								clazz.getIRI(), commentAnno
+							);
+							slimmer.man.applyChange(new AddAxiom(onto, ax));
+						}
+					}
+				}
+
+				// 6. save in OWL/XML format
 				SetOntologyID ontologyIDChange = new SetOntologyID(onto, IRI.create(slimmedURI));
 				slimmer.man.applyChange(ontologyIDChange);
 				File output = new File(slimmedFilename);
