@@ -156,7 +156,7 @@ public class Slimmer {
 								factory.getOWLAnnotationProperty(IRI.create("http://purl.foo.org/obo/IAO_0000115"));
 							OWLAnnotation commentAnno = factory.getOWLAnnotation(
 								newDescription,
-								factory.getOWLLiteral(annot.getValue().toString(), "en")
+								annot.getValue()
 							);
 							System.out.println("  new description: " + commentAnno);
 							OWLAxiom ax = factory.getOWLAnnotationAssertionAxiom(
