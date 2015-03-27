@@ -13,6 +13,8 @@ import org.semanticweb.owlapi.model.OWLClassAxiom;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.parameters.Imports;
+import org.semanticweb.owlapi.search.Searcher;
 
 public class SlimmerTest {
 
@@ -205,7 +207,7 @@ public class SlimmerTest {
 		OWLEntity entity = entities.iterator().next();
 		Assert.assertTrue(entity.isOWLClass());
 		OWLClass owlClass = entity.asOWLClass();
-		Set<OWLClassAxiom> axioms = ontology.getAxioms(owlClass);
+		Set<OWLClassAxiom> axioms = ontology.getAxioms(owlClass, Imports.INCLUDED);
 		Assert.assertEquals(1, axioms.size());
 		Assert.assertEquals("SubClassOf", axioms.iterator().next().getAxiomType().getName());
 	}
@@ -231,8 +233,8 @@ public class SlimmerTest {
 		OWLEntity entity = entities.iterator().next();
 		Assert.assertTrue(entity.isOWLClass());
 		OWLClass owlClass = entity.asOWLClass();
-		Assert.assertEquals(1, owlClass.getSuperClasses(ontology).size());
-		Set<OWLClassAxiom> axioms = ontology.getAxioms(owlClass);
+		Assert.assertEquals(1, Searcher.sup(ontology.getSubClassAxiomsForSubClass(owlClass)).size());
+		Set<OWLClassAxiom> axioms = ontology.getAxioms(owlClass, Imports.INCLUDED);
 		Assert.assertEquals("SubClassOf", axioms.iterator().next().getAxiomType().getName());
 	}
 }

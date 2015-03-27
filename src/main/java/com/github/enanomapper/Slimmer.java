@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,7 +15,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
+import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.AddOntologyAnnotation;
 import org.semanticweb.owlapi.model.IRI;
@@ -31,6 +32,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.RemoveImport;
 import org.semanticweb.owlapi.model.SetOntologyID;
+import org.semanticweb.owlapi.search.Searcher;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
 import org.semanticweb.owlapi.util.OWLOntologyMerger;
 import org.semanticweb.owlapi.util.SimpleIRIMapper;
@@ -155,7 +157,7 @@ public class Slimmer {
 
 	public void saveAs(File output) throws OWLOntologyStorageException {
 		IRI documentIRI2 = IRI.create(output);
-		man.saveOntology(onto, new RDFXMLOntologyFormat(), documentIRI2);
+		man.saveOntology(onto, new RDFXMLDocumentFormat(), documentIRI2);
 	}
 
 	private Set<String> explode(Set<Instruction> instructions) {
@@ -209,9 +211,7 @@ public class Slimmer {
 		Map<String,String> newSuperClasses = getNewSuperClasses(irisToSave);
 		System.out.println("" + singleIRIs);
 
-		OWLEntityRemover remover = new OWLEntityRemover(
-			man, Collections.singleton(onto)
-		);
+		OWLEntityRemover remover = new OWLEntityRemover(Collections.singleton(onto));
 		for (OWLClass ind : onto.getClassesInSignature()) {
 			String indIRI = ind.getIRI().toString();
 			System.out.println(indIRI);
@@ -249,9 +249,7 @@ public class Slimmer {
 		Set<String> singleIRIs = explode(irisToRemove);
 		System.out.println("" + singleIRIs);
 
-		OWLEntityRemover remover = new OWLEntityRemover(
-			man, Collections.singleton(onto)
-		);
+		OWLEntityRemover remover = new OWLEntityRemover(Collections.singleton(onto));
 		for (OWLClass ind : onto.getClassesInSignature()) {
 			String indIRI = ind.getIRI().toString();
 			System.out.println(indIRI);
@@ -266,7 +264,7 @@ public class Slimmer {
 	private Set<String> allSuperClasses(OWLClass clazz,
 			OWLOntology onto) {
 		Set<String> allSuperClasses = new HashSet<String>();
-		Set<OWLClassExpression> superClasses = clazz.getSuperClasses(onto);
+		Collection<OWLClassExpression> superClasses = Searcher.sup(onto.getSubClassAxiomsForSubClass(clazz));
 		for (OWLClassExpression superClass : superClasses) {
 			OWLClass superOwlClass = superClass.asOWLClass();
 			String superIri = superOwlClass.getIRI().toString();
@@ -280,9 +278,13 @@ public class Slimmer {
 	private Set<String> allSubClasses(OWLClass clazz,
 			OWLOntology onto) {
 		Set<String> allSubClasses = new HashSet<String>();
-		Set<OWLClassExpression> subClasses = clazz.getSubClasses(onto);
+		System.out.println("clazz: " + clazz);
+		Collection<OWLClassExpression> subClasses = Searcher.sub(onto.getSubClassAxiomsForSuperClass(clazz));
+		System.out.println("subclass count: " + subClasses.size());
 		for (OWLClassExpression subClass : subClasses) {
+			// skip itself
 			OWLClass subOwlClass = subClass.asOWLClass();
+			System.out.println("subclass: " + subOwlClass);
 			String subIri = subOwlClass.getIRI().toString();
 			allSubClasses.add(subIri);
 			// recurse
