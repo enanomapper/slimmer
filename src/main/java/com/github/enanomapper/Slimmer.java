@@ -149,11 +149,11 @@ public class Slimmer {
 				Set<OWLClass> entities = onto.getClassesInSignature();
 				for (OWLClass clazz : entities) {
 					for (OWLAnnotation annot : EntitySearcher.getAnnotations(clazz, onto)) {
-						if (annot.getProperty().getIRI().toString().equals("http://purl.obolibrary.org/obo/IAO_0000115")) {
-							System.out.println("  xx description: " + annot.getValue());
+						if (annot.getProperty().getIRI().toString().equals("http://purl.org/dc/elements/1.1/description")) {
+							System.out.println("  description: " + annot.getValue());
 							OWLDataFactory factory = slimmer.man.getOWLDataFactory();
 							OWLAnnotationProperty newDescription =
-								factory.getOWLAnnotationProperty(IRI.create("http://purl.foo.org/obo/IAO_0000115"));
+								factory.getOWLAnnotationProperty(IRI.create("http://purl.obolibrary.org/obo/IAO_0000115"));
 							OWLAnnotation commentAnno = factory.getOWLAnnotation(
 								newDescription,
 								annot.getValue()
