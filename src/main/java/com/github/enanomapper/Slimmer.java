@@ -33,6 +33,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.RemoveImport;
 import org.semanticweb.owlapi.model.SetOntologyID;
+import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.search.Searcher;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
 import org.semanticweb.owlapi.util.OWLOntologyMerger;
@@ -147,7 +148,7 @@ public class Slimmer {
 				// 5. update descriptions and labels
 				Set<OWLClass> entities = onto.getClassesInSignature();
 				for (OWLClass clazz : entities) {
-					for (OWLAnnotation annot : clazz.getAnnotations(onto)) {
+					for (OWLAnnotation annot : EntitySearcher.getAnnotations(clazz, onto)) {
 						if (annot.getProperty().getIRI().toString().equals("http://purl.obolibrary.org/obo/IAO_0000115")) {
 							System.out.println("  xx description: " + annot.getValue());
 							OWLDataFactory factory = slimmer.man.getOWLDataFactory();
