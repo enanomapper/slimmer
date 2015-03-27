@@ -19,7 +19,6 @@ import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.AddOntologyAnnotation;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
-import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -176,14 +175,6 @@ public class Slimmer {
 							System.out.println("Extracting " + superClass + "...");
 							singleIRIs.add(superClass);
 						}
-					} else if (entity instanceof OWLAnnotationProperty) {
-						OWLAnnotationProperty prop = (OWLAnnotationProperty)entity;
-						System.out.println("Property " + prop);
-						Set<String> superProps = allSuperProperties(prop, onto);
-						for (String superProp : superProps) {
-							System.out.println("Extracting " + superProp + "...");
-							singleIRIs.add(superProp);
-						}
 					}
 				}
 				singleIRIs.add(iri);
@@ -199,14 +190,6 @@ public class Slimmer {
 						for (String subClass : subClasses) {
 							System.out.println("Extracting " + subClass + "...");
 							singleIRIs.add(subClass);
-						}
-					} else if (entity instanceof OWLAnnotationProperty) {
-						OWLAnnotationProperty prop = (OWLAnnotationProperty)entity;
-						System.out.println("Property " + prop);
-						Set<String> subProps = allSubProperties(prop, onto);
-						for (String subProp : subProps) {
-							System.out.println("Extracting " + subProp + "...");
-							singleIRIs.add(subProp);
 						}
 					}
 				}
@@ -249,26 +232,6 @@ public class Slimmer {
 				}
 			}
 		}
-		for (OWLAnnotationProperty prop : onto.getAnnotationPropertiesInSignature()) {
-			String indIRI = prop.getIRI().toString();
-			System.out.println(indIRI);
-			if (!singleIRIs.contains(indIRI)) {
-				System.out.println("Remove: " + indIRI);
-				prop.accept(remover);
-			} else {
-				// OK, keep this one. But does it have a new super property?
-				if (newSuperClasses.containsKey(indIRI)) {
-					String newSuperProperty = newSuperClasses.get(indIRI);
-					OWLDataFactory factory = man.getOWLDataFactory();
-					System.out.println("Super annotation property: " + newSuperProperty);
-					OWLAnnotationProperty superProp = factory.getOWLAnnotationProperty(IRI.create(newSuperProperty));
-					OWLAxiom axiom = factory.getOWLSubAnnotationPropertyOfAxiom(prop, superProp);
-					System.out.println("Adding super annotation property: " + axiom);
-					AddAxiom addAxiom = new AddAxiom(onto, axiom);
-					man.applyChange(addAxiom);
-				}
-			}
-		}
 		man.applyChanges(remover.getChanges());
 	}
 	
@@ -297,14 +260,6 @@ public class Slimmer {
 				ind.accept(remover);
 			}
 		}
-		for (OWLAnnotationProperty prop : onto.getAnnotationPropertiesInSignature()) {
-			String indIRI = prop.getIRI().toString();
-			System.out.println(indIRI);
-			if (singleIRIs.contains(indIRI)) {
-				System.out.println("Remove: " + indIRI);
-				prop.accept(remover);
-			}
-		}
 		man.applyChanges(remover.getChanges());
 	}
 
@@ -322,19 +277,6 @@ public class Slimmer {
 		return allSuperClasses;
 	}
 
-	private Set<String> allSuperProperties(OWLAnnotationProperty prop,
-			OWLOntology onto) {
-		Set<String> allSuperClasses = new HashSet<String>();
-		Set<OWLAnnotationProperty> superProps = prop.getSuperProperties(onto);
-		for (OWLAnnotationProperty superProp : superProps) {
-			String superIri = superProp.getIRI().toString();
-			allSuperClasses.add(superIri);
-			// recurse
-			allSuperClasses.addAll(allSuperProperties(superProp, onto));
-		}
-		return allSuperClasses;
-	}
-
 	private Set<String> allSubClasses(OWLClass clazz,
 			OWLOntology onto) {
 		Set<String> allSubClasses = new HashSet<String>();
@@ -345,19 +287,6 @@ public class Slimmer {
 			allSubClasses.add(subIri);
 			// recurse
 			allSubClasses.addAll(allSubClasses(subOwlClass, onto));
-		}
-		return allSubClasses;
-	}
-
-	private Set<String> allSubProperties(OWLAnnotationProperty prop,
-			OWLOntology onto) {
-		Set<String> allSubClasses = new HashSet<String>();
-		Set<OWLAnnotationProperty> subProps = prop.getSubProperties(onto);
-		for (OWLAnnotationProperty subProp : subProps) {
-			String subIri = subProp.getIRI().toString();
-			allSubClasses.add(subIri);
-			// recurse
-			allSubClasses.addAll(allSubProperties(subProp, onto));
 		}
 		return allSubClasses;
 	}
