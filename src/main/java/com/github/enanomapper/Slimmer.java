@@ -8,8 +8,10 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -200,6 +202,24 @@ public class Slimmer {
 		OWLAnnotationProperty owlAnnotationProperty =
 			dataFac.getOWLAnnotationProperty(OWLRDFVocabulary.OWL_VERSION_INFO.getIRI());
 		OWLAnnotation anno = dataFac.getOWLAnnotation(owlAnnotationProperty, lit);
+		man.applyChange(new AddOntologyAnnotation(onto, anno));
+
+		// generation tool
+		lit = dataFac.getOWLLiteral("Slimmer");
+		owlAnnotationProperty = dataFac.getOWLAnnotationProperty(
+			IRI.create("http://www.geneontology.org/formats/oboInOwl#auto-generated-by")
+		);
+		anno = dataFac.getOWLAnnotation(owlAnnotationProperty, lit);
+		man.applyChange(new AddOntologyAnnotation(onto, anno));
+
+		// generation date
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = new Date();
+		lit = dataFac.getOWLLiteral(dateFormat.format(date));
+		owlAnnotationProperty = dataFac.getOWLAnnotationProperty(
+			IRI.create("http://www.geneontology.org/formats/oboInOwl#date")
+		);
+		anno = dataFac.getOWLAnnotation(owlAnnotationProperty, lit);
 		man.applyChange(new AddOntologyAnnotation(onto, anno));
 
 		// save to file

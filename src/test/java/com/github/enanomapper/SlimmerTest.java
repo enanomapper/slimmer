@@ -319,4 +319,22 @@ public class SlimmerTest {
 		String owlOutput = output.toString();
 		Assert.assertTrue(owlOutput.contains("This SLIM file"));
 	}
+
+	@Test
+	public void testGenerationDate() throws Exception {
+		Configuration conf = new Configuration();
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("uo.owl");
+		Slimmer slimmer = new Slimmer(stream);
+		OWLOntology ontology = slimmer.getOntology();
+		slimmer.removeAllExcept(irisToSave);
+		ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(67, ontology.getAxiomCount());
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		slimmer.saveAs(output);
+		String owlOutput = output.toString();
+		System.out.println(owlOutput);
+		Assert.assertTrue(owlOutput.contains(">2015-")); // TODO: update every year :)
+	}
 }
