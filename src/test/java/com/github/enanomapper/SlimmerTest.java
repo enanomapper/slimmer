@@ -279,4 +279,26 @@ public class SlimmerTest {
 		Assert.assertNotNull(ontology);
 		Assert.assertEquals(67, ontology.getAxiomCount());
 	}
+
+	@Test
+	public void testRemoveMoreDeclaredProperties() throws Exception {
+		String test = "+:http://www.bioassayontology.org/bao#BAO_0000555";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		Assert.assertNotNull(irisToSave);
+//		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bao_core.owl");
+		Slimmer slimmer = new Slimmer(stream);
+		OWLOntology ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(899, ontology.getAxiomCount());
+
+		// test the removing; should result in exactly one less axiom
+		slimmer.removeAllExcept(irisToSave);
+		ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(47, ontology.getAxiomCount());
+	}
 }
