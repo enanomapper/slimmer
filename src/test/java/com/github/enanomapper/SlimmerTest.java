@@ -237,4 +237,46 @@ public class SlimmerTest {
 		Set<OWLClassAxiom> axioms = ontology.getAxioms(owlClass, Imports.INCLUDED);
 		Assert.assertEquals("SubClassOf", axioms.iterator().next().getAxiomType().getName());
 	}
+
+	@Test
+	public void testNotRemoveDeclaredProperties() throws Exception {
+		String test = "+:http://purl.obolibrary.org/obo/uo#is_unit_of";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		Assert.assertNotNull(irisToSave);
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("uo.owl");
+		Slimmer slimmer = new Slimmer(stream);
+		OWLOntology ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(3203, ontology.getAxiomCount());
+
+		// test the removing; should result in exactly one less axiom
+		slimmer.removeAllExcept(irisToSave);
+		ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(68, ontology.getAxiomCount());
+	}
+
+	@Test
+	public void testRemoveDeclaredProperties() throws Exception {
+		Configuration conf = new Configuration();
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		Assert.assertNotNull(irisToSave);
+		Assert.assertEquals(0, conf.getTreePartsToSave().size());
+
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("uo.owl");
+		Slimmer slimmer = new Slimmer(stream);
+		OWLOntology ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(3203, ontology.getAxiomCount());
+
+		// test the removing; should result in exactly one less axiom
+		slimmer.removeAllExcept(irisToSave);
+		ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(67, ontology.getAxiomCount());
+	}
 }

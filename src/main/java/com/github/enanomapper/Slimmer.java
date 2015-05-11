@@ -25,6 +25,7 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLImportsDeclaration;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -235,6 +236,7 @@ public class Slimmer {
 		Map<String,String> newSuperClasses = getNewSuperClasses(irisToSave);
 		System.out.println("" + singleIRIs);
 
+		// remove classes
 		OWLEntityRemover remover = new OWLEntityRemover(Collections.singleton(onto));
 		for (OWLClass ind : onto.getClassesInSignature()) {
 			String indIRI = ind.getIRI().toString();
@@ -257,6 +259,21 @@ public class Slimmer {
 			}
 		}
 		man.applyChanges(remover.getChanges());
+
+		// remove properties
+		Set<OWLAxiom> propsToRemove = new HashSet<OWLAxiom>();
+		for (OWLAxiom axiom : onto.getAxioms()) {
+			if (axiom instanceof OWLDeclarationAxiom) {
+				OWLEntity entity = ((OWLDeclarationAxiom)axiom).getEntity();
+				if (entity.isOWLObjectProperty() || entity.isOWLDataProperty()) {
+					String propIRI = entity.getIRI().toString();
+					if (!singleIRIs.contains(propIRI)) {
+						propsToRemove.add(axiom);
+					}
+		        }
+			}
+		}
+		man.removeAxioms(onto, propsToRemove);
 	}
 	
 	private Map<String, String> getNewSuperClasses(Set<Instruction> irisToSave) {
