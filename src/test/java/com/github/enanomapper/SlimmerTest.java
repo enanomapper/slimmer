@@ -287,7 +287,7 @@ public class SlimmerTest {
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
 		Assert.assertNotNull(irisToSave);
-//		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		Assert.assertEquals(1, conf.getTreePartsToSave().size());
 
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bao_core.owl");
 		Slimmer slimmer = new Slimmer(stream);
