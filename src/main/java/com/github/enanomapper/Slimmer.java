@@ -3,9 +3,11 @@ package com.github.enanomapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +30,7 @@ import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLImportsDeclaration;
+import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -39,6 +42,7 @@ import org.semanticweb.owlapi.search.Searcher;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
 import org.semanticweb.owlapi.util.OWLOntologyMerger;
 import org.semanticweb.owlapi.util.SimpleIRIMapper;
+import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 public class Slimmer {
 
@@ -180,9 +184,26 @@ public class Slimmer {
 		}
 	}
 
-	public void saveAs(File output) throws OWLOntologyStorageException {
-		IRI documentIRI2 = IRI.create(output);
-		man.saveOntology(onto, new RDFXMLDocumentFormat(), documentIRI2);
+	public void saveAs(File output) throws OWLOntologyStorageException, FileNotFoundException {
+		saveAs(new FileOutputStream(output));
+	}
+
+	public void saveAs(OutputStream output) throws OWLOntologyStorageException {
+		// add provenance
+		OWLDataFactory dataFac = man.getOWLDataFactory();
+
+		// version info
+		OWLLiteral lit = dataFac.getOWLLiteral(
+			"This SLIM file was generated automatically by the eNanoMapper Slimmer "
+			+ "software library. For more information see "
+			+ "http://github.com/enanomapper/slimmer.");
+		OWLAnnotationProperty owlAnnotationProperty =
+			dataFac.getOWLAnnotationProperty(OWLRDFVocabulary.OWL_VERSION_INFO.getIRI());
+		OWLAnnotation anno = dataFac.getOWLAnnotation(owlAnnotationProperty, lit);
+		man.applyChange(new AddOntologyAnnotation(onto, anno));
+
+		// save to file
+		man.saveOntology(onto, new RDFXMLDocumentFormat(), output);
 	}
 
 	private Set<String> explode(Set<Instruction> instructions) {
