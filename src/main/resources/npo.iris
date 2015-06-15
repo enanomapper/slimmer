@@ -21,7 +21,7 @@
 +D(http://purl.obolibrary.org/obo/IAO_0000030):http://purl.bioontology.org/ontology/npo#NPO_1680 parameter
 +(http://purl.obolibrary.org/obo/BFO_0000016):http://purl.bioontology.org/ontology/npo#NPO_1529 bioavailability
 +D(http://purl.obolibrary.org/obo/BFO_0000007):http://purl.bioontology.org/ontology/npo#NPO_1944 synthesis part
-+D(http://purl.obolibrary.org/obo/BFO_0000016):http://purl.bioontology.org/ontology/npo#NPO_1338 toxicity
++D(http://purl.enanomapper.org/onto/ENM_0000018):http://purl.bioontology.org/ontology/npo#NPO_1338 toxicity
 +D(http://purl.bioontology.org/ontology/npo#NPO_199):http://purl.bioontology.org/ontology/npo#NPO_735 dendrimer
 -D:http://purl.bioontology.org/ontology/npo#NPO_1196 LC-50 
 -D:http://purl.bioontology.org/ontology/npo#NPO_1195 IC50 
