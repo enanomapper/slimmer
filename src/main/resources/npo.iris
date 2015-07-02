@@ -29,4 +29,7 @@
 -:http://purl.bioontology.org/ontology/npo#NPO_1536 inorganic nanoparticle 
 -:http://purl.bioontology.org/ontology/npo#NPO_1424 western blot analysis
 -:http://purl.bioontology.org/ontology/npo#NPO_1953 centrifugation
++D(http://purl.obolibrary.org/obo/PATO_0001536):http://purl.bioontology.org/ontology/npo#NPO_500 solubility in water
++(http://purl.obolibrary.org/obo/UO_0000186):http://purl.bioontology.org/ontology/npo#NPO_1365 aspect ratio
++(http://semanticscience.org/resource/CHEMINF_000442):http://purl.bioontology.org/ontology/npo#NPO_1204 isoelectric point
 
