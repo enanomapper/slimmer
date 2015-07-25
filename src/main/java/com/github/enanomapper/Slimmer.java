@@ -95,6 +95,7 @@ public class Slimmer {
 		return this.onto;
 	}
 	public static void main(String[] args) {
+		boolean allSucceeded = true;
 		String rootFolder = args[0];
 		System.out.println("Searching configuration files in " + rootFolder);
 		File dir = new File(rootFolder);
@@ -182,8 +183,10 @@ public class Slimmer {
 				slimmer.saveAs(output);
 			} catch (Exception e) {
 				e.printStackTrace();
+				allSucceeded = false;
 			}
 		}
+		if (!allSucceeded) System.exit(-1);
 	}
 
 	public void saveAs(File output) throws OWLOntologyStorageException, FileNotFoundException {
