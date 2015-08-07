@@ -6,7 +6,7 @@
 +D(http://purl.obolibrary.org/obo/IAO_0000030):http://purl.bioontology.org/ontology/npo#NPO_1779 datum value
 +(http://purl.obolibrary.org/obo/PATO_0001464):http://purl.bioontology.org/ontology/npo#NPO_1302 zeta potential
 +(http://purl.obolibrary.org/obo/BFO_0000016):http://purl.bioontology.org/ontology/npo#NPO_421 electronegativity
-+D(http://purl.obolibrary.org/obo/BFO_0000007):http://purl.bioontology.org/ontology/npo#NPO_1616 functionalization of nanoparticle
++D(http://purl.obolibrary.org/obo/BFO_0000015):http://purl.bioontology.org/ontology/npo#NPO_1616 functionalization of nanoparticle
 +D(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.bioontology.org/ontology/npo#NPO_1914 hydrodynamic size
 +D(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.bioontology.org/ontology/npo#NPO_888 physical state
 +D(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.bioontology.org/ontology/npo#NPO_274 shape
@@ -20,7 +20,7 @@
 +D(http://purl.obolibrary.org/obo/BFO_0000040):http://purl.bioontology.org/ontology/npo#NPO_1436 instrument
 +D(http://purl.obolibrary.org/obo/IAO_0000030):http://purl.bioontology.org/ontology/npo#NPO_1680 parameter
 +(http://purl.obolibrary.org/obo/BFO_0000016):http://purl.bioontology.org/ontology/npo#NPO_1529 bioavailability
-+D(http://purl.obolibrary.org/obo/BFO_0000007):http://purl.bioontology.org/ontology/npo#NPO_1944 synthesis part
++D(http://purl.obolibrary.org/obo/BFO_0000015):http://purl.bioontology.org/ontology/npo#NPO_1944 synthesis part
 +D(http://purl.enanomapper.org/onto/ENM_0000018):http://purl.bioontology.org/ontology/npo#NPO_1338 toxicity
 +D(http://purl.bioontology.org/ontology/npo#NPO_199):http://purl.bioontology.org/ontology/npo#NPO_735 dendrimer
 -D:http://purl.bioontology.org/ontology/npo#NPO_1196 LC-50 
