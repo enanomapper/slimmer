@@ -24,6 +24,7 @@ import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.AddOntologyAnnotation;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -177,16 +178,18 @@ public class Slimmer {
 				}
 
 				// 6. remove some nasty NPO properties
-				slimmer.man.removeAxioms(
-					onto, onto.getAnnotationAssertionAxioms(
-						IRI.create("http://purl.bioontology.org/ontology/npo#FULL_SYN")
-					)
-				);
-				slimmer.man.removeAxioms(
-					onto, onto.getAnnotationAssertionAxioms(
-						IRI.create("http://purl.bioontology.org/ontology/npo#definition")
-					)
-				);
+				entities = onto.getClassesInSignature();
+				for (OWLClass clazz : entities) {
+					Set<OWLAnnotationAssertionAxiom> annots = onto.getAnnotationAssertionAxioms(clazz.getIRI());
+					Set<OWLAnnotationAssertionAxiom> toRemove = new HashSet<OWLAnnotationAssertionAxiom>();
+					for (OWLAnnotationAssertionAxiom axiom : annots) {
+						if (axiom.getProperty().getIRI().toString().equals("http://purl.bioontology.org/ontology/npo#FULL_SYN") ||
+							axiom.getProperty().getIRI().toString().equals("http://purl.bioontology.org/ontology/npo#FULL_SYN")) {
+							toRemove.add(axiom);
+						}
+					}
+					slimmer.man.removeAxioms(onto, toRemove);
+				}
 
 				// 7. save in OWL/XML format
 				SetOntologyID ontologyIDChange = new SetOntologyID(onto, IRI.create(slimmedURI));
