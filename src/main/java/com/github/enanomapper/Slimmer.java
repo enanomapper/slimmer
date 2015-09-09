@@ -321,7 +321,10 @@ public class Slimmer {
 					String propIRI = entity.getIRI().toString();
 					if (!singleIRIs.contains(propIRI)) {
 						propsToRemove.add(axiom);
-					}
+					} else if ("http://purl.bioontology.org/ontology/npo#FULL_SYN".equals(propIRI) ||
+            				   "http://purl.bioontology.org/ontology/npo#definition".equals(propIRI)) {
+						propsToRemove.add(axiom);
+            	    }
 		        }
 			}
 		}
