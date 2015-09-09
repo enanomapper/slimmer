@@ -226,7 +226,9 @@ public class Slimmer {
 		man.applyChange(new AddOntologyAnnotation(onto, anno));
 
 		// save to file
-		man.saveOntology(onto, new RDFXMLDocumentFormat(), output);
+		RDFXMLDocumentFormat format = new RDFXMLDocumentFormat();
+		format.setPrefix("ncicp", "http://ncicb.nci.nih.gov/xml/owl/EVS/ComplexProperties.xsd#");
+		man.saveOntology(onto, format, output);
 	}
 
 	private Set<String> explode(Set<Instruction> instructions) {

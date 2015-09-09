@@ -304,6 +304,24 @@ public class SlimmerTest {
 	}
 
 	@Test
+	public void testExtraNamespaces() throws Exception {
+		Configuration conf = new Configuration();
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("uo.owl");
+		Slimmer slimmer = new Slimmer(stream);
+		OWLOntology ontology = slimmer.getOntology();
+		slimmer.removeAllExcept(irisToSave);
+		ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(67, ontology.getAxiomCount());
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		slimmer.saveAs(output);
+		String owlOutput = output.toString();
+		System.out.println(owlOutput);
+		Assert.assertTrue(owlOutput.contains("xmlns:ncicp"));
+	}
+
+	@Test
 	public void testSlimmingVersionAnnotation() throws Exception {
 		Configuration conf = new Configuration();
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
