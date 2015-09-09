@@ -184,7 +184,7 @@ public class Slimmer {
 					Set<OWLAnnotationAssertionAxiom> toRemove = new HashSet<OWLAnnotationAssertionAxiom>();
 					for (OWLAnnotationAssertionAxiom axiom : annots) {
 						if (axiom.getProperty().getIRI().toString().equals("http://purl.bioontology.org/ontology/npo#FULL_SYN") ||
-							axiom.getProperty().getIRI().toString().equals("http://purl.bioontology.org/ontology/npo#defintion")) {
+							axiom.getProperty().getIRI().toString().equals("http://purl.bioontology.org/ontology/npo#definition")) {
 							toRemove.add(axiom);
 						}
 					}
