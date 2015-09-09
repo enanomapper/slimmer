@@ -176,7 +176,19 @@ public class Slimmer {
 					}
 				}
 
-				// 6. save in OWL/XML format
+				// 6. remove some nasty NPO properties
+				slimmer.man.removeAxioms(
+					onto, onto.getAnnotationAssertionAxioms(
+						IRI.create("http://purl.bioontology.org/ontology/npo#FULL_SYN")
+					)
+				);
+				slimmer.man.removeAxioms(
+					onto, onto.getAnnotationAssertionAxioms(
+						IRI.create("http://purl.bioontology.org/ontology/npo#definition")
+					)
+				);
+
+				// 7. save in OWL/XML format
 				SetOntologyID ontologyIDChange = new SetOntologyID(onto, IRI.create(slimmedURI));
 				slimmer.man.applyChange(ontologyIDChange);
 				File output = new File(slimmedFilename);
@@ -320,9 +332,6 @@ public class Slimmer {
 				if (entity.isOWLObjectProperty() || entity.isOWLDataProperty()) {
 					String propIRI = entity.getIRI().toString();
 					if (!singleIRIs.contains(propIRI)) {
-						propsToRemove.add(axiom);
-					} else if ("http://purl.bioontology.org/ontology/npo#FULL_SYN".equals(propIRI) ||
-            				   "http://purl.bioontology.org/ontology/npo#definition".equals(propIRI)) {
 						propsToRemove.add(axiom);
             	    }
 		        }
