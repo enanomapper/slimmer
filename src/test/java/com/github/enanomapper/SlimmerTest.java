@@ -307,7 +307,8 @@ public class SlimmerTest {
 	public void testExtraNamespaces() throws Exception {
 		Configuration conf = new Configuration();
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
-		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("uo.owl");
+		String ontoFile = "uo.owl";
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ontoFile);
 		Slimmer slimmer = new Slimmer(stream);
 		OWLOntology ontology = slimmer.getOntology();
 		slimmer.removeAllExcept(irisToSave);
@@ -315,7 +316,7 @@ public class SlimmerTest {
 		Assert.assertNotNull(ontology);
 		Assert.assertEquals(67, ontology.getAxiomCount());
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		slimmer.saveAs(output);
+		slimmer.saveAs(output, ontoFile);
 		String owlOutput = output.toString();
 		System.out.println(owlOutput);
 		Assert.assertTrue(owlOutput.contains("xmlns:ncicp"));
@@ -325,7 +326,8 @@ public class SlimmerTest {
 	public void testSlimmingVersionAnnotation() throws Exception {
 		Configuration conf = new Configuration();
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
-		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("uo.owl");
+		String ontoFile = "uo.owl";
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ontoFile);
 		Slimmer slimmer = new Slimmer(stream);
 		OWLOntology ontology = slimmer.getOntology();
 		slimmer.removeAllExcept(irisToSave);
@@ -333,16 +335,35 @@ public class SlimmerTest {
 		Assert.assertNotNull(ontology);
 		Assert.assertEquals(67, ontology.getAxiomCount());
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		slimmer.saveAs(output);
+		slimmer.saveAs(output, ontoFile);
 		String owlOutput = output.toString();
 		Assert.assertTrue(owlOutput.contains("This SLIM file"));
+	}
+
+	@Test
+	public void testSourceAnnotation() throws Exception {
+		Configuration conf = new Configuration();
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		String ontoFile = "uo.owl";
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ontoFile);
+		Slimmer slimmer = new Slimmer(stream);
+		OWLOntology ontology = slimmer.getOntology();
+		slimmer.removeAllExcept(irisToSave);
+		ontology = slimmer.getOntology();
+		Assert.assertNotNull(ontology);
+		Assert.assertEquals(67, ontology.getAxiomCount());
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		slimmer.saveAs(output, ontoFile);
+		String owlOutput = output.toString();
+		Assert.assertTrue(owlOutput.contains("pav:importedFrom"));
 	}
 
 	@Test
 	public void testGenerationDate() throws Exception {
 		Configuration conf = new Configuration();
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
-		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("uo.owl");
+		String ontoFile = "uo.owl";
+		InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ontoFile);
 		Slimmer slimmer = new Slimmer(stream);
 		OWLOntology ontology = slimmer.getOntology();
 		slimmer.removeAllExcept(irisToSave);
@@ -350,7 +371,7 @@ public class SlimmerTest {
 		Assert.assertNotNull(ontology);
 		Assert.assertEquals(67, ontology.getAxiomCount());
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		slimmer.saveAs(output);
+		slimmer.saveAs(output, ontoFile);
 		String owlOutput = output.toString();
 		System.out.println(owlOutput);
 		Assert.assertTrue(owlOutput.contains(">2015-")); // TODO: update every year :)

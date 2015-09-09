@@ -111,7 +111,8 @@ public class Slimmer {
 				// read the information about the ontology to process
 				Properties props = new Properties();
 				props.load(new FileReader(file));
-				String owlFilename = props.getProperty("owl"); // for step 1
+				String owlURL = props.getProperty("owl"); // for step 1
+				String owlFilename = owlURL;
 				if (owlFilename.contains("/")) {
 					owlFilename = owlFilename.substring(owlFilename.lastIndexOf('/')+1);
 				}
@@ -180,7 +181,7 @@ public class Slimmer {
 				slimmer.man.applyChange(ontologyIDChange);
 				File output = new File(slimmedFilename);
 				System.out.println("Saving to: " + output.getAbsolutePath());
-				slimmer.saveAs(output);
+				slimmer.saveAs(output, owlURL);
 			} catch (Exception e) {
 				e.printStackTrace();
 				allSucceeded = false;
@@ -189,11 +190,11 @@ public class Slimmer {
 		if (!allSucceeded) System.exit(-1);
 	}
 
-	public void saveAs(File output) throws OWLOntologyStorageException, FileNotFoundException {
-		saveAs(new FileOutputStream(output));
+	public void saveAs(File output, String orinalOWL) throws OWLOntologyStorageException, FileNotFoundException {
+		saveAs(new FileOutputStream(output), orinalOWL);
 	}
 
-	public void saveAs(OutputStream output) throws OWLOntologyStorageException {
+	public void saveAs(OutputStream output, String originalOWL) throws OWLOntologyStorageException {
 		// add provenance
 		OWLDataFactory dataFac = man.getOWLDataFactory();
 
@@ -205,6 +206,11 @@ public class Slimmer {
 		OWLAnnotationProperty owlAnnotationProperty =
 			dataFac.getOWLAnnotationProperty(OWLRDFVocabulary.OWL_VERSION_INFO.getIRI());
 		OWLAnnotation anno = dataFac.getOWLAnnotation(owlAnnotationProperty, lit);
+		man.applyChange(new AddOntologyAnnotation(onto, anno));
+		OWLAnnotationProperty pavImportedFrom = dataFac.getOWLAnnotationProperty(
+			IRI.create("http://purl.org/pav/importedFrom")
+		);
+		anno = dataFac.getOWLAnnotation(pavImportedFrom, dataFac.getOWLLiteral(originalOWL));
 		man.applyChange(new AddOntologyAnnotation(onto, anno));
 
 		// generation tool
