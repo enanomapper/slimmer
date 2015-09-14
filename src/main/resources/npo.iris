@@ -32,4 +32,5 @@
 +D(http://purl.obolibrary.org/obo/PATO_0001536):http://purl.bioontology.org/ontology/npo#NPO_500 solubility in water
 +(http://purl.obolibrary.org/obo/UO_0000186):http://purl.bioontology.org/ontology/npo#NPO_1365 aspect ratio
 +(http://semanticscience.org/resource/CHEMINF_000442):http://purl.bioontology.org/ontology/npo#NPO_1204 isoelectric point
++(http://www.bioassayontology.org/bao#BAO_0003009):http://purl.bioontology.org/ontology/npo#NPO_1709 LDH assay
 
