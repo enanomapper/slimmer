@@ -31,8 +31,12 @@ public class ConfigurationTest {
 		String test = "+D(http://www.ifomis.org/bfo/1.1/snap#Entity):http://www.ifomis.org/bfo/1.1/snap#MaterialEntity";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
-		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#Entity", conf.getTreePartsToSave().iterator().next().getNewSuperClass());
+		Assert.assertEquals(2, conf.getTreePartsToSave().size());
+		Iterator<Instruction> toSaveInstructions = conf.getTreePartsToSave().iterator();
+		Instruction instruction = toSaveInstructions.next();
+		while (!instruction.getUriString().equals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity")) // ok, the next one
+			instruction = toSaveInstructions.next();
+		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#Entity", instruction.getNewSuperClass());
 	}
 
 	@Test
@@ -40,8 +44,11 @@ public class ConfigurationTest {
 		String test = "+(http://www.ifomis.org/bfo/1.1/snap#Entity):http://www.ifomis.org/bfo/1.1/snap#MaterialEntity";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
-		Instruction instruction = conf.getTreePartsToSave().iterator().next();
+		Assert.assertEquals(2, conf.getTreePartsToSave().size());
+		Iterator<Instruction> toSaveInstructions = conf.getTreePartsToSave().iterator();
+		Instruction instruction = toSaveInstructions.next();
+		if (!instruction.getUriString().equals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity")) // ok, the next one
+			instruction = toSaveInstructions.next();
 		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#Entity", instruction.getNewSuperClass());
 		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity", instruction.getUriString());
 	}
@@ -53,22 +60,17 @@ public class ConfigurationTest {
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
-		Iterator<Instruction> iter = irisToSave.iterator();
-		Instruction instruction1 = iter.next(); System.out.println(instruction1);
-		Instruction instruction2 = iter.next(); System.out.println(instruction2);
-		if (instruction1.getUriString().endsWith("MaterialEntity")) {
-			Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity", instruction1.getUriString());
-			Assert.assertNotNull(instruction1.getNewSuperClass());
-			Assert.assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction1.getNewSuperClass());
-			Assert.assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction2.getUriString());
-			Assert.assertNull(instruction2.getNewSuperClass());
-		} else {
-			Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity", instruction2.getUriString());
-			Assert.assertNotNull(instruction2.getNewSuperClass());
-			Assert.assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction2.getNewSuperClass());
-			Assert.assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction1.getUriString());
-			Assert.assertNull(instruction1.getNewSuperClass());
+		Instruction instruction1 = null;
+		Instruction instruction2 = null;
+		for (Instruction instruction : irisToSave) {
+			if (instruction.getUriString().endsWith("#MaterialEntity")) instruction1 = instruction;
+			if (instruction.getUriString().endsWith("#Entity")) instruction2 = instruction;
 		}
+		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity", instruction1.getUriString());
+		Assert.assertNotNull(instruction1.getNewSuperClass());
+		Assert.assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction1.getNewSuperClass());
+		Assert.assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction2.getUriString());
+		Assert.assertNull(instruction2.getNewSuperClass());
 	}
 	
 	@Test
@@ -148,7 +150,8 @@ public class ConfigurationTest {
 				    + "-:http://purl.obolibrary.org/obo/PATO_0000125 mass";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(5, conf.getTreePartsToSave().size());
+		System.out.println(conf.getTreePartsToSave());
+		Assert.assertEquals(7, conf.getTreePartsToSave().size());
 		Assert.assertEquals(1, conf.getTreePartsToRemove().size());
 	}
 }

@@ -100,7 +100,7 @@ public class SlimmerTest {
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
 
-		Assert.assertEquals(2, conf.getTreePartsToSave().size());
+		Assert.assertEquals(3, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
@@ -212,7 +212,7 @@ public class SlimmerTest {
 		if (!instruction.getUriString().endsWith("Object")) instruction = instructions.next();
 		String baseClass = instruction.getUriString();
 
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		Assert.assertEquals(2, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
@@ -237,12 +237,13 @@ public class SlimmerTest {
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
-		Iterator<Instruction> instructions = irisToSave.iterator();
-		Instruction instruction = instructions.next();
-		if (!instruction.getUriString().endsWith("MaterialEntity")) instruction = instructions.next();
-		String baseClass = instruction.getUriString();
+		String baseClass = null;
+		for (Instruction instruction : irisToSave) {
+			if (instruction.getUriString().endsWith("#MaterialEntity")) 
+				baseClass = instruction.getUriString();
+		}
 
-		Assert.assertEquals(2, conf.getTreePartsToSave().size());
+		Assert.assertEquals(3, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
@@ -265,10 +266,13 @@ public class SlimmerTest {
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
-		Instruction instruction = irisToSave.iterator().next();
+		Iterator<Instruction> iterator = irisToSave.iterator();
+		Instruction instruction = iterator.next();
+		while (!instruction.getUriString().equals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity") && iterator.hasNext())
+			instruction = iterator.next();
 		String baseClass = instruction.getUriString();
 
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		Assert.assertEquals(2, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
@@ -277,7 +281,9 @@ public class SlimmerTest {
 		Assert.assertEquals(2, ontology.getClassesInSignature().size());
 		Set<OWLEntity> entities = ontology.getEntitiesInSignature(IRI.create(baseClass));
 		Assert.assertEquals(1, entities.size());
-		OWLEntity entity = entities.iterator().next();
+		Iterator<OWLEntity> entityIter = entities.iterator();
+		OWLEntity entity = entityIter.next();
+		
 		Assert.assertTrue(entity.isOWLClass());
 		OWLClass owlClass = entity.asOWLClass();
 		Assert.assertEquals(1, Searcher.sup(ontology.getSubClassAxiomsForSubClass(owlClass)).size());

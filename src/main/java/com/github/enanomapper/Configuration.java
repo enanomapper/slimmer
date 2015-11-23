@@ -94,7 +94,11 @@ public class Configuration {
 				iri = iri.substring(0, index);
 			}
 			Instruction ins = new Instruction(iri, scope, comment);
-			if (newSuperClass != null) ins.setNewSuperClass(newSuperClass);
+			if (newSuperClass != null) {
+				ins.setNewSuperClass(newSuperClass);
+				Instruction superIns = new Instruction(newSuperClass, Instruction.Scope.SINGLE, "Used as Superclass");
+				irisToSave.add(superIns);
+			}
 			if (addRemoveInstruct == '+') {
 				irisToSave.add(ins);
 			} else {
