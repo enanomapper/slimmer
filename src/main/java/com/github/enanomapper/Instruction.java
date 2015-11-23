@@ -53,4 +53,9 @@ public class Instruction {
 		}
 		return buffer.toString();
 	}
+
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
 }
