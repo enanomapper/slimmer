@@ -127,4 +127,28 @@ public class ConfigurationTest {
 		Assert.assertEquals(1, conf.getTreePartsToSave().size());
 		Assert.assertEquals(1, conf.getTreePartsToRemove().size());
 	}
+
+	@Test
+	public void testAnotherTwoLiner() throws Exception {
+		String test = "+U:http://www.ifomis.org/bfo/1.1/snap#MaterialEntity\n"
+				    + "+D:http://www.ifomis.org/bfo/1.1/snap#FiatObjectPart\n";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Assert.assertEquals(2, conf.getTreePartsToSave().size());
+	}
+
+	/** See bug <a href="https://github.com/enanomapper/slimmer/issues/19">#19</a>. */
+	@Test
+	public void bug19() throws Exception {
+		String test = "+D(http://purl.obolibrary.org/obo/IAO_0000030):http://semanticscience.org/resource/CHEMINF_000123 chemical descriptor\n"
+				    + "+(http://purl.obolibrary.org/obo/BFO_0000019):http://semanticscience.org/resource/CHEMINF_000247 surface area\n"
+				    + "+D(http://purl.obolibrary.org/obo/BFO_0000019):http://semanticscience.org/resource/CHEMINF_000101 chemical substance quality\n"
+				    + "+D(http://purl.obolibrary.org/obo/BFO_0000019):http://semanticscience.org/resource/CHEMINF_000031 molecular entity quality\n"
+				    + "+D(http://purl.obolibrary.org/obo/IAO_0000030):http://semanticscience.org/resource/CHEMINF_000014 chemical entity information format description\n"
+				    + "-:http://purl.obolibrary.org/obo/PATO_0000125 mass";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Assert.assertEquals(5, conf.getTreePartsToSave().size());
+		Assert.assertEquals(1, conf.getTreePartsToRemove().size());
+	}
 }
