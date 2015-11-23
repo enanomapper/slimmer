@@ -58,4 +58,10 @@ public class Instruction {
 	public int hashCode() {
 		return toString().hashCode();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Instruction)) return false;
+		return this.hashCode() == obj.hashCode();
+	}
 }

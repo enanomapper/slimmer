@@ -14,6 +14,14 @@ public class InstructionTest {
 	}
 
 	@Test
+	public void testEquals() throws Exception {
+		String uri = "http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
+		Instruction superIns = new Instruction(uri, Instruction.Scope.SINGLE, "User as Superclass");
+		Instruction superIns2 = new Instruction(uri, Instruction.Scope.SINGLE, "User as Superclass");
+		Assert.assertEquals(superIns, superIns2);
+	}
+
+	@Test
 	public void testHashCode_Different() throws Exception {
 		String uri = "http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Instruction superIns = new Instruction(uri, Instruction.Scope.SINGLE, "User as Superclass");
