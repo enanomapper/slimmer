@@ -30,10 +30,12 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLImportsDeclaration;
 import org.semanticweb.owlapi.model.OWLLiteral;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -325,22 +327,26 @@ public class Slimmer {
 				}
 			}
 		}
-		man.applyChanges(remover.getChanges());
 
 		// remove properties
-		Set<OWLAxiom> propsToRemove = new HashSet<OWLAxiom>();
-		for (OWLAxiom axiom : onto.getAxioms()) {
-			if (axiom instanceof OWLDeclarationAxiom) {
-				OWLEntity entity = ((OWLDeclarationAxiom)axiom).getEntity();
-				if (entity.isOWLObjectProperty() || entity.isOWLDataProperty()) {
-					String propIRI = entity.getIRI().toString();
-					if (!singleIRIs.contains(propIRI)) {
-						propsToRemove.add(axiom);
-            	    }
-		        }
+		for (OWLObjectProperty axiom : onto.getObjectPropertiesInSignature()) {
+			String propIRI = axiom.getIRI().toString();
+			System.out.println(propIRI);
+			if (!singleIRIs.contains(propIRI)) {
+				System.out.println("Remove: " + propIRI);
+				axiom.accept(remover);
 			}
 		}
-		man.removeAxioms(onto, propsToRemove);
+		for (OWLDataProperty axiom : onto.getDataPropertiesInSignature()) {
+			String propIRI = axiom.getIRI().toString();
+			System.out.println(propIRI);
+			if (!singleIRIs.contains(propIRI)) {
+				System.out.println("Remove: " + propIRI);
+				axiom.accept(remover);
+			}
+		}
+
+		man.applyChanges(remover.getChanges());
 	}
 	
 	private Map<String, String> getNewSuperClasses(Set<Instruction> irisToSave) {
@@ -366,6 +372,25 @@ public class Slimmer {
 				ind.accept(remover);
 			}
 		}
+
+		// remove properties
+		for (OWLObjectProperty axiom : onto.getObjectPropertiesInSignature()) {
+			String propIRI = axiom.getIRI().toString();
+			System.out.println(propIRI);
+			if (singleIRIs.contains(propIRI)) {
+				System.out.println("Remove: " + propIRI);
+				axiom.accept(remover);
+			}
+		}
+		for (OWLDataProperty axiom : onto.getDataPropertiesInSignature()) {
+			String propIRI = axiom.getIRI().toString();
+			System.out.println(propIRI);
+			if (singleIRIs.contains(propIRI)) {
+				System.out.println("Remove: " + propIRI);
+				axiom.accept(remover);
+			}
+		}
+
 		man.applyChanges(remover.getChanges());
 	}
 
