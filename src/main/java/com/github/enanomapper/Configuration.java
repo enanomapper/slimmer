@@ -7,6 +7,27 @@ import java.io.Reader;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This helper class reads Slimmer configuration files that specify which part of the
+ * ontology is to be kept or removed. The configuration file uses a line-based
+ * instruction format. Each line specifies part of the ontology to be kept or removed.
+ * An example is:
+ * <pre>
+ * +D(http://purl.bioontology.org/ontology/npo#NPO_1436):http://www.bioassayontology.org/bao#BAO_0000697 detection instrument
+ * +D(http://purl.obolibrary.org/obo/IAO_0000030):http://www.bioassayontology.org/bao#BAO_0000179 endpoint
+ * +D(http://purl.obolibrary.org/obo/OBI_0000070):http://www.bioassayontology.org/bao#BAO_0000015 bioassay
+ * </pre>
+ * 
+ * <p>This configuration file uses a custom syntax which is briefly explained here. By
+ * default it removes all content. The first character on a line indicates if the something
+ * needs to be included (+) or excluded from a previously defined inclusion (-). The second
+ * character indicates whether a whole upper (U) or down (D) tree should be included or
+ * excluded. After the colon the URI of the resource is given to be in- or excluded, followed
+ * by a user-oriented comment. Finally, before the colon and in brackets an optional
+ * superclass of this resource can be specified, possibly from other ontologies.
+ *
+ * @author egonw
+ */
 public class Configuration {
 
 	private Set<Instruction> irisToSave = new HashSet<Instruction>();

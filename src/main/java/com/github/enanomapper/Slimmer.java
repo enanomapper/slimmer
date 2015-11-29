@@ -48,6 +48,19 @@ import org.semanticweb.owlapi.util.OWLOntologyMerger;
 import org.semanticweb.owlapi.util.SimpleIRIMapper;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
+/**
+ * The purpose of this class is to take one or more OWL ontology files and remove everything that
+ * we do not want in. This includes, in the first place, 3rd party classes and predicates that some
+ * ontology imports from other ontologies (from the BAO ontology, we only want to keep terms added
+ * by BAO and not used from IAO or SIO). But we may also only use part of the ontology itself. For
+ * example, keep some key terms but not full subtrees.
+ * 
+ * <p>What is kept to be, is specified by a configuration file read by the {@link Configuration}
+ * class. This class specifies the format used by these config files. If nothing is specified, all
+ * content (classes, object and data properties) is removed.
+ *
+ * @author egonw
+ */
 public class Slimmer {
 
 	private OWLOntologyManager man;
@@ -61,6 +74,13 @@ public class Slimmer {
 		this(owlFile, null);
 	}
 
+	/**
+	 * Constructs a new Slimmer object that will slim the given OWL file.
+	 *
+	 * @param owlFile
+	 * @param mergedOntologyIRI
+	 * @throws OWLOntologyCreationException
+	 */
 	public Slimmer(InputStream owlFile, String mergedOntologyIRI) throws OWLOntologyCreationException {
 		man = OWLManager.createOWLOntologyManager();
 		if (System.getenv("WORKSPACE") != null) {
@@ -96,6 +116,23 @@ public class Slimmer {
 	public OWLOntology getOntology() {
 		return this.onto;
 	}
+
+	/**
+	 * Main method to allow running the Slimmer from the command line. The full slimming
+	 * process consists of a number of steps:
+	 * <ol>
+	 *   <li>read the instructions that specify which ontology to slim</li>
+	 *   <li>read the ontology to slim (including imports)</li>
+	 *   <li>read the instructions that specify how the ontology is to be slimmed</li>
+	 *   <li>remove everything from the ontology except what is to be kept, but after that still
+	 *       delete things explicitly marked to be removed</li>
+	 *   <li>remove owl:import statements from the OWL file</li>
+	 *   <li>normalize term labels</li>
+	 *   <li>save as OWL/XML (which includes updating the ontology metadata)</li>
+	 * </ol>
+	 *
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		boolean allSucceeded = true;
 		String rootFolder = args[0];
@@ -178,7 +215,7 @@ public class Slimmer {
 					}
 				}
 
-				// 6. remove some nasty NPO properties
+				// 6. remove some nasty NPO properties (WORKAROUND: may be removed later)
 				entities = onto.getClassesInSignature();
 				for (OWLClass clazz : entities) {
 					Set<OWLAnnotationAssertionAxiom> annots = onto.getAnnotationAssertionAxioms(clazz.getIRI());
@@ -210,6 +247,13 @@ public class Slimmer {
 		saveAs(new FileOutputStream(output), orinalOWL);
 	}
 
+	/**
+	 *  Save the ontology as OWL/XML. It first includes new meta data about the slimming process.
+	 *
+	 * @param output
+	 * @param originalOWL
+	 * @throws OWLOntologyStorageException
+	 */
 	public void saveAs(OutputStream output, String originalOWL) throws OWLOntologyStorageException {
 		// add provenance
 		OWLDataFactory dataFac = man.getOWLDataFactory();
@@ -253,6 +297,13 @@ public class Slimmer {
 		man.saveOntology(onto, format, output);
 	}
 
+	/**
+	 * This functions applies the <code>D</code> and <code>U</code> statements from the configuration
+	 * files by traversing the OWL hierarchy and either including all parents or all children.
+	 *
+	 * @param instructions
+	 * @return
+	 */
 	private Set<String> explode(Set<Instruction> instructions) {
 		Set<String> singleIRIs = new HashSet<String>();
 		for (Instruction instruction : instructions) {
@@ -299,6 +350,13 @@ public class Slimmer {
 		return singleIRIs;
 	}
 
+	/**
+	 * This methods removes all classes, data properties, and object properties, except those
+	 * URIs specified by the parameter. If a class is kept, the intrductions also indicates
+	 * what the new parent of the class is.
+	 *
+	 * @param irisToSave which IRIs are to be kept
+	 */
 	public void removeAllExcept(Set<Instruction> irisToSave) {
 		Set<String> singleIRIs = explode(irisToSave);
 		Map<String,String> newSuperClasses = getNewSuperClasses(irisToSave);
@@ -358,6 +416,11 @@ public class Slimmer {
 		return newSuperClasses;
 	}
 
+	/**
+	 * This method removes all IRIs given by the parameter.
+	 *
+	 * @param irisToRemove
+	 */
 	public void removeAll(Set<Instruction> irisToRemove) {
 		Set<String> singleIRIs = explode(irisToRemove);
 		System.out.println("" + singleIRIs);
@@ -407,6 +470,13 @@ public class Slimmer {
 		return allSuperClasses;
 	}
 
+	/**
+	 * Helper method that returns a collection sub classes of the given class.
+	 *
+	 * @param clazz
+	 * @param onto
+	 * @return
+	 */
 	private Set<String> allSubClasses(OWLClass clazz,
 			OWLOntology onto) {
 		Set<String> allSubClasses = new HashSet<String>();
