@@ -6,4 +6,5 @@
 +(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.obolibrary.org/obo/PATO_0000125 mass
 +D(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.obolibrary.org/obo/PATO_0000161 rate
 +D(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.obolibrary.org/obo/PATO_0001536 solubility
++(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.obolibrary.org/obo/PATO_0000011 age
 +D(http://purl.obolibrary.org/obo/BFO_0000019):http://purl.obolibrary.org/obo/PATO_0000117 size
