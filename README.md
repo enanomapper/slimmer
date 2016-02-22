@@ -9,7 +9,9 @@ Configuring the slimming
 
 The configuration of the slimming of an ontology consists of two files. The first file is a
 Java properties file, listing the ontology, a pointer to the second configuration file, and
-the URI of the output ontology. For example:
+the URI of the output ontology. Details are found at https://github.com/enanomapper/slimmer/wiki/Slimmer-configuration-files
+
+For example:
 
     owl=http://www.bioassayontology.org/bao/bao_complete.owl
     iris=bao.iris
