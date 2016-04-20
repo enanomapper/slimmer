@@ -43,7 +43,7 @@ public class Instruction {
 		StringBuffer buffer = new StringBuffer();
 		if (scope == Scope.SINGLE) {}
 		else if (scope == Scope.UP) { buffer.append("U"); }
-		else if (scope == Scope.UP) { buffer.append("D"); }
+		else if (scope == Scope.DOWN) { buffer.append("D"); }
 		if (newSuperClass != null) {
 			buffer.append('(').append(newSuperClass).append(')');
 		}
