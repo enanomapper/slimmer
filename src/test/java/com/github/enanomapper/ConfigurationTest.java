@@ -132,7 +132,7 @@ public class ConfigurationTest {
 
 	@Test
 	public void testAnotherTwoLiner() throws Exception {
-		String test = "+U:http://www.ifomis.org/bfo/1.1/snap#MaterialEntity\n"
+                String test = "+U:http://www.ifomis.org/bfo/1.1/snap#MaterialEntity\n"
 				    + "+D:http://www.ifomis.org/bfo/1.1/snap#FiatObjectPart\n";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));

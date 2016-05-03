@@ -71,6 +71,7 @@ public class Configuration {
 				reader.close();
 				throw new Exception("Invalid configuration input at line " + lineNumber + ": first character should be '+' or '-'.");
 			}
+                        
 			char upDownInstruct = instruction.charAt(1);
 			Instruction.Scope scope = Instruction.Scope.SINGLE;
 			String newSuperClass = null;
