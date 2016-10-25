@@ -34,11 +34,11 @@ public class Configuration {
 	private Set<Instruction> irisToRemove = new HashSet<Instruction>();
 	
 	public void removeTreePart(Instruction instruction) {
-		irisToSave.add(instruction);
+		irisToRemove.add(instruction);
 	}
 	
 	public void addTreePart(Instruction instruction) {
-		irisToRemove.add(instruction);
+		irisToSave.add(instruction);
 	}
 
 	public Set<Instruction> getTreePartsToSave() {
