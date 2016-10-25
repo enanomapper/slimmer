@@ -353,7 +353,7 @@ public class Slimmer {
 
 	/**
 	 * This methods removes all classes, data properties, and object properties, except those
-	 * URIs specified by the parameter. If a class is kept, the intrductions also indicates
+	 * URIs specified by the parameter. If a class is kept, the instructions also indicates
 	 * what the new parent of the class is.
 	 *
 	 * @param irisToSave which IRIs are to be kept
