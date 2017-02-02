@@ -63,6 +63,7 @@ public class ConfigurationTest {
 		Instruction instruction1 = null;
 		Instruction instruction2 = null;
 		for (Instruction instruction : irisToSave) {
+			System.out.println("Instr: " + instruction);
 			if (instruction.getUriString().endsWith("#MaterialEntity")) instruction1 = instruction;
 			if (instruction.getUriString().endsWith("#Entity")) instruction2 = instruction;
 		}
@@ -110,6 +111,24 @@ public class ConfigurationTest {
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
 		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+	}
+
+	@Test
+	public void bug45() throws Exception {
+		// the next line was the actual code; the problem is that after the IRI there is a TAB where a space was expected
+		String test = "+D(http://purl.bioontology.org/ontology/npo#NPO_707):http://purl.obolibrary.org/obo/CHEBI_50828	silicon dioxide nanoparticle ";
+		Configuration conf = new Configuration();
+		conf.read(new StringReader(test));
+		Set<Instruction> irisToSave = conf.getTreePartsToSave();
+		Assert.assertEquals(2, irisToSave.size());
+		Instruction instruction1 = null;
+		for (Instruction instruction : irisToSave) {
+			System.out.println("Instr: \"" + instruction + "\"");
+			if (instruction.getUriString().contains("CHEBI_50828")) instruction1 = instruction;
+		}
+		Assert.assertEquals("http://purl.obolibrary.org/obo/CHEBI_50828", instruction1.getUriString());
+		Assert.assertEquals("http://purl.bioontology.org/ontology/npo#NPO_707", instruction1.getNewSuperClass());
+		Assert.assertEquals("silicon dioxide nanoparticle", instruction1.getComment());
 	}
 
 	@Test
