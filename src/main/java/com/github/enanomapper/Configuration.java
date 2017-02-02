@@ -58,7 +58,7 @@ public class Configuration {
 		String line = reader.readLine();
 		int lineNumber = 1;
 		while (line != null) {
-			String instruction = line.trim();
+			String instruction = line.trim().replace("\t", " ");
 			if (instruction.length() == 0) {
 				System.out.println("Skipping an unexpected empty line at line " + lineNumber);
 				line = reader.readLine();
