@@ -67,11 +67,11 @@ public class Slimmer {
 	private OWLOntology onto;
 
 	public Slimmer(File owlFile, String mergedOntologyIRI) throws OWLOntologyCreationException, FileNotFoundException {
-		this(new FileInputStream(owlFile), mergedOntologyIRI);
+		this(owlFile.getName(), new FileInputStream(owlFile), mergedOntologyIRI);
 	}
 
 	public Slimmer(InputStream owlFile) throws OWLOntologyCreationException {
-		this(owlFile, null);
+		this("undefined for InputStream", owlFile, null);
 	}
 
 	/**
@@ -81,7 +81,8 @@ public class Slimmer {
 	 * @param mergedOntologyIRI
 	 * @throws OWLOntologyCreationException
 	 */
-	public Slimmer(InputStream owlFile, String mergedOntologyIRI) throws OWLOntologyCreationException {
+	public Slimmer(String filename, InputStream owlFile, String mergedOntologyIRI) throws OWLOntologyCreationException {
+		System.out.println("Loading OWL file: " + filename);
 		man = OWLManager.createOWLOntologyManager();
 		if (System.getenv("WORKSPACE") != null) {
 			String root = System.getenv("WORKSPACE");
