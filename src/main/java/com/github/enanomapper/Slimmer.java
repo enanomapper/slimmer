@@ -9,7 +9,6 @@ import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +16,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
@@ -197,7 +197,7 @@ public class Slimmer {
 				// 5. update descriptions and labels
 				Set<OWLClass> entities = onto.getClassesInSignature();
 				for (OWLClass clazz : entities) {
-					for (OWLAnnotation annot : EntitySearcher.getAnnotations(clazz, onto)) {
+					for (OWLAnnotation annot : (Iterable<OWLAnnotation>)EntitySearcher.getAnnotations(clazz, onto).iterator()) {
 						if (annot.getProperty().getIRI().toString().equals("http://purl.org/dc/elements/1.1/description") ||
 							annot.getProperty().getIRI().toString().equals("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#P97")) {
 							System.out.println("  description: " + annot.getValue());
@@ -461,14 +461,14 @@ public class Slimmer {
 	private Set<String> allSuperClasses(OWLClass clazz,
 			OWLOntology onto) {
 		Set<String> allSuperClasses = new HashSet<String>();
-		Collection<OWLClassExpression> superClasses = Searcher.sup(onto.getSubClassAxiomsForSubClass(clazz));
-		for (OWLClassExpression superClass : superClasses) {
+		Stream<OWLClassExpression> superClasses = Searcher.sup(onto.subClassAxiomsForSubClass(clazz));
+		superClasses.forEach(superClass -> {
 			OWLClass superOwlClass = superClass.asOWLClass();
 			String superIri = superOwlClass.getIRI().toString();
 			allSuperClasses.add(superIri);
 			// recurse
 			allSuperClasses.addAll(allSuperClasses(superOwlClass, onto));
-		}
+		});
 		return allSuperClasses;
 	}
 
@@ -483,17 +483,17 @@ public class Slimmer {
 			OWLOntology onto) {
 		Set<String> allSubClasses = new HashSet<String>();
 		System.out.println("clazz: " + clazz);
-		Collection<OWLClassExpression> subClasses = Searcher.sub(onto.getSubClassAxiomsForSuperClass(clazz));
-		System.out.println("subclass count: " + subClasses.size());
-		for (OWLClassExpression subClass : subClasses) {
-			// skip itself
-			OWLClass subOwlClass = subClass.asOWLClass();
-			System.out.println("subclass: " + subOwlClass);
-			String subIri = subOwlClass.getIRI().toString();
-			allSubClasses.add(subIri);
-			// recurse
-			allSubClasses.addAll(allSubClasses(subOwlClass, onto));
-		}
+		Stream<OWLClassExpression> subClasses = Searcher.sub(onto.subClassAxiomsForSuperClass(clazz));
+		subClasses.forEach(subClass -> {
+		  // skip itself
+		  OWLClass subOwlClass = subClass.asOWLClass();
+		  System.out.println("subclass: " + subOwlClass);
+		  String subIri = subOwlClass.getIRI().toString();
+		  allSubClasses.add(subIri);
+		  // recurse
+		  allSubClasses.addAll(allSubClasses(subOwlClass, onto));
+		});
+		System.out.println("subclass count: " + allSubClasses.size());
 		return allSubClasses;
 	}
 

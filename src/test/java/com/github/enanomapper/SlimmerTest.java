@@ -286,7 +286,7 @@ public class SlimmerTest {
 		
 		Assert.assertTrue(entity.isOWLClass());
 		OWLClass owlClass = entity.asOWLClass();
-		Assert.assertEquals(1, Searcher.sup(ontology.getSubClassAxiomsForSubClass(owlClass)).size());
+		Assert.assertEquals(1, Searcher.sup(ontology.subClassAxiomsForSubClass(owlClass)).count());
 		Set<OWLClassAxiom> axioms = ontology.getAxioms(owlClass, Imports.INCLUDED);
 		Assert.assertEquals("SubClassOf", axioms.iterator().next().getAxiomType().getName());
 	}
