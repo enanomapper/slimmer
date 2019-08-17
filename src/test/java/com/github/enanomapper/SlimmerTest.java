@@ -445,7 +445,7 @@ public class SlimmerTest {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		slimmer.saveAs(output, ontoFile);
 		String owlOutput = output.toString();
-		System.out.println(owlOutput);
-		Assert.assertTrue("Did not find the generation data.", owlOutput.contains(">2017-")); // TODO: update every year :)
+		System.out.println("Output: " + owlOutput);
+		Assert.assertTrue("Did not find the generation data.", owlOutput.contains(">2019-")); // TODO: update every year :)
 	}
 }
