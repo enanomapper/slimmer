@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -505,7 +504,7 @@ public class Slimmer {
 	}};
 
 	private void addMappings(OWLOntologyManager m, String root) {
-		if (!root.endsWith("/")) root = URLEncoder.encode(root + "/");
+		if (!root.endsWith("/")) root = (root + "/").replace(" ", "%20");
 		for (String ontoIRI : mappings.keySet()) {
 			String localPart = mappings.get(ontoIRI);
 			m.addIRIMapper(new SimpleIRIMapper(
