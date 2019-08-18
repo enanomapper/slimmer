@@ -499,8 +499,8 @@ public class Slimmer {
 
 	@SuppressWarnings("serial")
 	Map<String,String> mappings = new HashMap<String,String>() {{
-		put("http://purl.obolibrary.org/obo/oae/RO_dev_import", "RO_dev_import.owl");
-		put("https://raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.owl", "hp.owl");
+		// put("http://purl.obolibrary.org/obo/oae/RO_dev_import", "RO_dev_import.owl");
+		// put("https://raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.owl", "hp.owl");
 	}};
 
 	private void addMappings(OWLOntologyManager m, String root) {
