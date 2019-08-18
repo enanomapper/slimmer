@@ -93,11 +93,13 @@ public class Slimmer {
 		if (mergedOntologyIRI != null) {
 			Set<OWLImportsDeclaration> importDeclarations = onto.getImportsDeclarations();
 			for (OWLImportsDeclaration declaration : importDeclarations) {
-				try {
-					man.getOntology(declaration.getIRI());
-					System.out.println("Loaded imported ontology: " + declaration.getIRI());
-				} catch (Exception exception) {
-					System.out.println("Failed to load imported ontology: " + declaration.getIRI());
+				if (!man.contains(declaration.getIRI())) {
+					try {
+						man.getOntology(declaration.getIRI());
+						System.out.println("Loaded imported ontology: " + declaration.getIRI());
+					} catch (Exception exception) {
+						System.out.println("Failed to load imported ontology: " + declaration.getIRI());
+					}
 				}
 			}
 			// Merge all of the loaded ontologies, specifying an IRI for the new ontology
