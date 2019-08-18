@@ -34,7 +34,7 @@ possibly from other ontologies.
 Compile
 -------
 
-    $ mvn assembly:single
+    $ mvn clean compile assembly:single
 
 Run
 ---
