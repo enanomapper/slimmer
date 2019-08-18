@@ -94,7 +94,7 @@ public class Slimmer {
 			Set<OWLImportsDeclaration> importDeclarations = onto.getImportsDeclarations();
 			for (OWLImportsDeclaration declaration : importDeclarations) {
 				try {
-					man.loadOntology(declaration.getIRI());
+					man.getOntology(declaration.getIRI());
 					System.out.println("Loaded imported ontology: " + declaration.getIRI());
 				} catch (Exception exception) {
 					System.out.println("Failed to load imported ontology: " + declaration.getIRI());
