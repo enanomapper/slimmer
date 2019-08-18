@@ -197,7 +197,8 @@ public class Slimmer {
 				// 5. update descriptions and labels
 				Set<OWLClass> entities = onto.getClassesInSignature();
 				for (OWLClass clazz : entities) {
-					for (OWLAnnotation annot : (Iterable<OWLAnnotation>)EntitySearcher.getAnnotations(clazz, onto).iterator()) {
+					Stream<OWLAnnotation> annotations = EntitySearcher.getAnnotations(clazz, onto);
+					annotations.forEach(annot -> {
 						if (annot.getProperty().getIRI().toString().equals("http://purl.org/dc/elements/1.1/description") ||
 							annot.getProperty().getIRI().toString().equals("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#P97")) {
 							System.out.println("  description: " + annot.getValue());
@@ -214,7 +215,7 @@ public class Slimmer {
 							);
 							slimmer.man.applyChange(new AddAxiom(onto, ax));
 						}
-					}
+					});
 				}
 
 				// 6. remove some nasty NPO properties (WORKAROUND: may be removed later)
