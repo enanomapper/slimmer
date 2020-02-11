@@ -10,6 +10,7 @@ Configuring the slimming
 The configuration of the slimming of an ontology consists of two files. The first file is a
 Java properties file, listing the ontology, a pointer to the second configuration file, and
 the URI of the output ontology. Details are found at https://github.com/enanomapper/slimmer/wiki/Slimmer-configuration-files
+and in https://enanomapper.github.io/tutorials/Added%20ontology%20terms/README.html
 
 For example:
 
