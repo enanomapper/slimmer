@@ -4,4 +4,4 @@ language: java
 jdk:
   - oraclejdk11
 
-script: mvn clean install assembly:single
+script: mvn -Dmaven.test.skip=true clean install assembly:single
