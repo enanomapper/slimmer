@@ -15,15 +15,18 @@ and in https://enanomapper.github.io/tutorials/Added%20ontology%20terms/README.h
 
 For example:
 
-    owl=http://www.bioassayontology.org/bao/bao_complete.owl
-    iris=bao.iris
-    slimmed=http://purl.enanomapper.org/onto/external/bao-slim.owl
+```
+owl=http://www.bioassayontology.org/bao/bao_complete.owl
+iris=bao.iris
+slimmed=http://purl.enanomapper.org/onto/external/bao-slim.owl
 
 The second, .iris file configures the slicing of the ontology:
 
-    +D(http://purl.bioontology.org/ontology/npo#NPO_1436):http://www.bioassayontology.org/bao#BAO_0000697 detection instrument
-    +D(http://purl.obolibrary.org/obo/IAO_0000030):http://www.bioassayontology.org/bao#BAO_0000179 endpoint
-    +D(http://purl.obolibrary.org/obo/OBI_0000070):http://www.bioassayontology.org/bao#BAO_0000015 bioassay
+```
++D(http://purl.bioontology.org/ontology/npo#NPO_1436):http://www.bioassayontology.org/bao#BAO_0000697 detection instrument
++D(http://purl.obolibrary.org/obo/IAO_0000030):http://www.bioassayontology.org/bao#BAO_0000179 endpoint
++D(http://purl.obolibrary.org/obo/OBI_0000070):http://www.bioassayontology.org/bao#BAO_0000015 bioassay
+```
  
 This configuration file uses a custom syntax which is briefly explained here. By default it removes all content.
 
@@ -36,9 +39,13 @@ possibly from other ontologies.
 Compile
 -------
 
-    $ mvn clean compile assembly:single
+```shell
+mvn clean compile assembly:single
+```
 
 Run
 ---
 
-    $ java -cp target/slimmer-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.github.enanomapper.Slimmer src/main/resources
+```shell
+java -cp target/slimmer-1.0.0-SNAPSHOT-jar-with-dependencies.jar com.github.enanomapper.Slimmer src/main/resources
+```
