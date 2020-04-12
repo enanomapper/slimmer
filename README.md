@@ -19,8 +19,9 @@ For example:
 owl=http://www.bioassayontology.org/bao/bao_complete.owl
 iris=bao.iris
 slimmed=http://purl.enanomapper.org/onto/external/bao-slim.owl
+```
 
-The second, .iris file configures the slicing of the ontology:
+The second, `.iris` file configures the slicing of the ontology:
 
 ```
 +D(http://purl.bioontology.org/ontology/npo#NPO_1436):http://www.bioassayontology.org/bao#BAO_0000697 detection instrument
