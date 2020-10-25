@@ -7,7 +7,7 @@
     <groupId>com.github.enanomapper</groupId>
     <artifactId>slimmer</artifactId>
     <name>slimmer</name>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
 
     <build>
         <pluginManagement>
