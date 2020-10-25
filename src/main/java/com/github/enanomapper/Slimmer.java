@@ -466,11 +466,13 @@ public class Slimmer {
 		Set<String> allSuperClasses = new HashSet<String>();
 		Stream<OWLClassExpression> superClasses = Searcher.sup(onto.subClassAxiomsForSubClass(clazz));
 		superClasses.forEach(superClass -> {
-			OWLClass superOwlClass = superClass.asOWLClass();
-			String superIri = superOwlClass.getIRI().toString();
-			allSuperClasses.add(superIri);
-			// recurse
-			allSuperClasses.addAll(allSuperClasses(superOwlClass, onto));
+			if (superClass.isOWLClass()) {
+				OWLClass superOwlClass = superClass.asOWLClass();
+				String superIri = superOwlClass.getIRI().toString();
+				allSuperClasses.add(superIri);
+				// recurse
+				allSuperClasses.addAll(allSuperClasses(superOwlClass, onto));
+			}
 		});
 		return allSuperClasses;
 	}
