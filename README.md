@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/enanomapper/slimmer.svg?branch=master)](https://travis-ci.org/enanomapper/slimmer)
+[![build](https://github.com/enanomapper/slimmer/actions/workflows/maven.yml/badge.svg)](https://github.com/enanomapper/slimmer/actions/workflows/maven.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4546421.svg)](https://doi.org/10.5281/zenodo.4546421)
 
 Slimmer is a slim tool to slim ontologies as part of ontology integration. It allows users to
 provide configuration files that specify which parts of an ontology should be kept and/or
