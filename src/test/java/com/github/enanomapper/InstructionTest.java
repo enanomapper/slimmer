@@ -1,7 +1,8 @@
 package com.github.enanomapper;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 public class InstructionTest {
 
@@ -10,7 +11,7 @@ public class InstructionTest {
 		String uri = "http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Instruction superIns = new Instruction(uri, Instruction.Scope.SINGLE, "User as Superclass");
 		Instruction superIns2 = new Instruction(uri, Instruction.Scope.SINGLE, "User as Superclass");
-		Assert.assertEquals(superIns.hashCode(), superIns2.hashCode());
+		assertEquals(superIns.hashCode(), superIns2.hashCode());
 	}
 
 	@Test
@@ -18,7 +19,7 @@ public class InstructionTest {
 		String uri = "http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Instruction superIns = new Instruction(uri, Instruction.Scope.SINGLE, "User as Superclass");
 		Instruction superIns2 = new Instruction(uri, Instruction.Scope.SINGLE, "User as Superclass");
-		Assert.assertEquals(superIns, superIns2);
+		assertEquals(superIns, superIns2);
 	}
 
 	@Test
@@ -26,7 +27,7 @@ public class InstructionTest {
 		String uri = "http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Instruction superIns = new Instruction(uri, Instruction.Scope.SINGLE, "User as Superclass");
 		Instruction superIns2 = new Instruction(uri, Instruction.Scope.SINGLE, "User as Subclass");
-		Assert.assertNotSame(superIns.hashCode(), superIns2.hashCode());
+		assertNotSame(superIns.hashCode(), superIns2.hashCode());
 	}
 
 }

@@ -4,8 +4,11 @@ import java.io.StringReader;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ConfigurationTest {
 
@@ -14,7 +17,7 @@ public class ConfigurationTest {
 		String test = "+U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
 	}
 
 	@Test
@@ -22,8 +25,8 @@ public class ConfigurationTest {
 		String test = "+U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant Comment";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
-		Assert.assertEquals("Comment", conf.getTreePartsToSave().iterator().next().getComment());
+		assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals("Comment", conf.getTreePartsToSave().iterator().next().getComment());
 	}
 
 	@Test
@@ -31,12 +34,12 @@ public class ConfigurationTest {
 		String test = "+D(http://www.ifomis.org/bfo/1.1/snap#Entity):http://www.ifomis.org/bfo/1.1/snap#MaterialEntity";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(2, conf.getTreePartsToSave().size());
+		assertEquals(2, conf.getTreePartsToSave().size());
 		Iterator<Instruction> toSaveInstructions = conf.getTreePartsToSave().iterator();
 		Instruction instruction = toSaveInstructions.next();
 		while (!instruction.getUriString().equals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity")) // ok, the next one
 			instruction = toSaveInstructions.next();
-		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#Entity", instruction.getNewSuperClass());
+		assertEquals("http://www.ifomis.org/bfo/1.1/snap#Entity", instruction.getNewSuperClass());
 	}
 
 	@Test
@@ -44,13 +47,13 @@ public class ConfigurationTest {
 		String test = "+(http://www.ifomis.org/bfo/1.1/snap#Entity):http://www.ifomis.org/bfo/1.1/snap#MaterialEntity";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(2, conf.getTreePartsToSave().size());
+		assertEquals(2, conf.getTreePartsToSave().size());
 		Iterator<Instruction> toSaveInstructions = conf.getTreePartsToSave().iterator();
 		Instruction instruction = toSaveInstructions.next();
 		if (!instruction.getUriString().equals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity")) // ok, the next one
 			instruction = toSaveInstructions.next();
-		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#Entity", instruction.getNewSuperClass());
-		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity", instruction.getUriString());
+		assertEquals("http://www.ifomis.org/bfo/1.1/snap#Entity", instruction.getNewSuperClass());
+		assertEquals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity", instruction.getUriString());
 	}
 
 	@Test
@@ -67,11 +70,11 @@ public class ConfigurationTest {
 			if (instruction.getUriString().endsWith("#MaterialEntity")) instruction1 = instruction;
 			if (instruction.getUriString().endsWith("#Entity")) instruction2 = instruction;
 		}
-		Assert.assertEquals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity", instruction1.getUriString());
-		Assert.assertNotNull(instruction1.getNewSuperClass());
-		Assert.assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction1.getNewSuperClass());
-		Assert.assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction2.getUriString());
-		Assert.assertNull(instruction2.getNewSuperClass());
+		assertEquals("http://www.ifomis.org/bfo/1.1/snap#MaterialEntity", instruction1.getUriString());
+		assertNotNull(instruction1.getNewSuperClass());
+		assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction1.getNewSuperClass());
+		assertEquals("http://www.ifomis.org/bfo/1.1#Entity", instruction2.getUriString());
+		assertNull(instruction2.getNewSuperClass());
 	}
 	
 	@Test
@@ -79,22 +82,28 @@ public class ConfigurationTest {
 		String test = "-U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(0, conf.getTreePartsToSave().size());
-		Assert.assertEquals(1, conf.getTreePartsToRemove().size());
+		assertEquals(0, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToRemove().size());
 	}
 
-	@Test(expected=Exception.class)
-	public void testMissingAdd() throws Exception {
-		String test = "U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
-		Configuration conf = new Configuration();
-		conf.read(new StringReader(test));
+	@Test
+	public void testMissingAdd() {
+		Exception exception = assertThrows(Exception.class, () -> {
+		    String test = "U:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
+		    Configuration conf = new Configuration();
+		    conf.read(new StringReader(test));
+		});
+		assertNotNull(exception);
 	}
 
-	@Test(expected=Exception.class)
-	public void testMissingColon() throws Exception {
-		String test = "+Uhttp://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
-		Configuration conf = new Configuration();
-		conf.read(new StringReader(test));
+	@Test
+	public void testMissingColon() {
+		Exception exception = assertThrows(Exception.class, () -> {
+		    String test = "+Uhttp://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
+		    Configuration conf = new Configuration();
+		    conf.read(new StringReader(test));
+		});
+		assertNotNull(exception);
 	}
 
 	@Test
@@ -102,7 +111,7 @@ public class ConfigurationTest {
 		String test = "+:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
 	}
 
 	@Test
@@ -110,7 +119,7 @@ public class ConfigurationTest {
 		String test = "+D:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
 	}
 
 	@Test
@@ -120,15 +129,15 @@ public class ConfigurationTest {
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
-		Assert.assertEquals(2, irisToSave.size());
+		assertEquals(2, irisToSave.size());
 		Instruction instruction1 = null;
 		for (Instruction instruction : irisToSave) {
 			System.out.println("Instr: \"" + instruction + "\"");
 			if (instruction.getUriString().contains("CHEBI_50828")) instruction1 = instruction;
 		}
-		Assert.assertEquals("http://purl.obolibrary.org/obo/CHEBI_50828", instruction1.getUriString());
-		Assert.assertEquals("http://purl.bioontology.org/ontology/npo#NPO_707", instruction1.getNewSuperClass());
-		Assert.assertEquals("silicon dioxide nanoparticle", instruction1.getComment());
+		assertEquals("http://purl.obolibrary.org/obo/CHEBI_50828", instruction1.getUriString());
+		assertEquals("http://purl.bioontology.org/ontology/npo#NPO_707", instruction1.getNewSuperClass());
+		assertEquals("silicon dioxide nanoparticle", instruction1.getComment());
 	}
 
 	@Test
@@ -136,7 +145,7 @@ public class ConfigurationTest {
 		String test = "-:http://www.ifomis.org/bfo/1.1/snap#DependentContinuant";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(1, conf.getTreePartsToRemove().size());
+		assertEquals(1, conf.getTreePartsToRemove().size());
 	}
 
 	@Test
@@ -145,8 +154,8 @@ public class ConfigurationTest {
 				    + "-D:http://www.ifomis.org/bfo/1.1/snap#FiatObjectPart\n";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
-		Assert.assertEquals(1, conf.getTreePartsToRemove().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToRemove().size());
 	}
 
 	@Test
@@ -155,7 +164,7 @@ public class ConfigurationTest {
 				    + "+D:http://www.ifomis.org/bfo/1.1/snap#FiatObjectPart\n";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(2, conf.getTreePartsToSave().size());
+		assertEquals(2, conf.getTreePartsToSave().size());
 	}
 
 	/** See bug <a href="https://github.com/enanomapper/slimmer/issues/19">#19</a>. */
@@ -170,7 +179,7 @@ public class ConfigurationTest {
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
 		System.out.println(conf.getTreePartsToSave());
-		Assert.assertEquals(7, conf.getTreePartsToSave().size());
-		Assert.assertEquals(1, conf.getTreePartsToRemove().size());
+		assertEquals(7, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToRemove().size());
 	}
 }

@@ -6,8 +6,12 @@ import java.io.StringReader;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAxiom;
@@ -24,8 +28,8 @@ public class SlimmerTest {
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertNotSame(0, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertNotSame(0, ontology.getAxiomCount());
 	}
 
 	@Test
@@ -35,13 +39,13 @@ public class SlimmerTest {
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
 		
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(3, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(3, ontology.getClassesInSignature().size());
 	}
 
 	@Test
@@ -51,13 +55,13 @@ public class SlimmerTest {
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
 		
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(1, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(1, ontology.getClassesInSignature().size());
 	}
 
 	@Test
@@ -67,13 +71,13 @@ public class SlimmerTest {
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
 		
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(4, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(4, ontology.getClassesInSignature().size());
 	}
 
 	@Test
@@ -83,13 +87,13 @@ public class SlimmerTest {
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
 		
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(39, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(39, ontology.getClassesInSignature().size());
 	}
 
 	@Test
@@ -100,13 +104,13 @@ public class SlimmerTest {
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
 
-		Assert.assertEquals(3, conf.getTreePartsToSave().size());
+		assertEquals(3, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(3, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(3, ontology.getClassesInSignature().size());
 	}
 
 	@Test
@@ -116,13 +120,13 @@ public class SlimmerTest {
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
 		
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(1, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(1, ontology.getClassesInSignature().size());
 	}
 
 	@Test
@@ -134,14 +138,14 @@ public class SlimmerTest {
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
 		Set<Instruction> irisToRemove = conf.getTreePartsToRemove();
 
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		slimmer.removeAll(irisToRemove);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(0, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(0, ontology.getClassesInSignature().size());
 	}
 
 	@Test
@@ -153,14 +157,14 @@ public class SlimmerTest {
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
 		Set<Instruction> irisToRemove = conf.getTreePartsToRemove();
 
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		slimmer.removeAll(irisToRemove);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(38, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(38, ontology.getClassesInSignature().size());
 	}
 
 	@Test
@@ -172,14 +176,14 @@ public class SlimmerTest {
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
 		Set<Instruction> irisToRemove = conf.getTreePartsToRemove();
 
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		slimmer.removeAll(irisToRemove);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(3, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(3, ontology.getClassesInSignature().size());
 	}
 
 	@Test
@@ -191,14 +195,14 @@ public class SlimmerTest {
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
 		Set<Instruction> irisToRemove = conf.getTreePartsToRemove();
 
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertEquals(1, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		slimmer.removeAll(irisToRemove);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(3, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(3, ontology.getClassesInSignature().size());
 	}
 
 	@Test
@@ -212,22 +216,22 @@ public class SlimmerTest {
 		if (!instruction.getUriString().endsWith("Object")) instruction = instructions.next();
 		String baseClass = instruction.getUriString();
 
-		Assert.assertEquals(2, conf.getTreePartsToSave().size());
+		assertEquals(2, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(2, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(2, ontology.getClassesInSignature().size());
 
 		Set<OWLEntity> entities = ontology.getEntitiesInSignature(IRI.create(baseClass));
-		Assert.assertEquals(1, entities.size());
+		assertEquals(1, entities.size());
 		OWLEntity entity = entities.iterator().next();
-		Assert.assertTrue(entity.isOWLClass());
+		assertTrue(entity.isOWLClass());
 		OWLClass owlClass = entity.asOWLClass();
 		Set<OWLClassAxiom> axioms = ontology.getAxioms(owlClass, Imports.INCLUDED);
-		Assert.assertEquals(1, axioms.size());
-		Assert.assertEquals("SubClassOf", axioms.iterator().next().getAxiomType().getName());
+		assertEquals(1, axioms.size());
+		assertEquals("SubClassOf", axioms.iterator().next().getAxiomType().getName());
 	}
 
 	@Test
@@ -243,21 +247,21 @@ public class SlimmerTest {
 				baseClass = instruction.getUriString();
 		}
 
-		Assert.assertEquals(3, conf.getTreePartsToSave().size());
+		assertEquals(3, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(2, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(2, ontology.getClassesInSignature().size());
 		Set<OWLEntity> entities = ontology.getEntitiesInSignature(IRI.create(baseClass));
-		Assert.assertEquals(1, entities.size());
+		assertEquals(1, entities.size());
 		OWLEntity entity = entities.iterator().next();
-		Assert.assertTrue(entity.isOWLClass());
+		assertTrue(entity.isOWLClass());
 		OWLClass owlClass = entity.asOWLClass();
 		Set<OWLClassAxiom> axioms = ontology.getAxioms(owlClass, Imports.INCLUDED);
-		Assert.assertEquals(1, axioms.size());
-		Assert.assertEquals("SubClassOf", axioms.iterator().next().getAxiomType().getName());
+		assertEquals(1, axioms.size());
+		assertEquals("SubClassOf", axioms.iterator().next().getAxiomType().getName());
 	}
 
 	@Test
@@ -272,23 +276,23 @@ public class SlimmerTest {
 			instruction = iterator.next();
 		String baseClass = instruction.getUriString();
 
-		Assert.assertEquals(2, conf.getTreePartsToSave().size());
+		assertEquals(2, conf.getTreePartsToSave().size());
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bfo-1.1.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		slimmer.removeAllExcept(irisToSave);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(2, ontology.getClassesInSignature().size());
+		assertNotNull(ontology);
+		assertEquals(2, ontology.getClassesInSignature().size());
 		Set<OWLEntity> entities = ontology.getEntitiesInSignature(IRI.create(baseClass));
-		Assert.assertEquals(1, entities.size());
+		assertEquals(1, entities.size());
 		Iterator<OWLEntity> entityIter = entities.iterator();
 		OWLEntity entity = entityIter.next();
 		
-		Assert.assertTrue(entity.isOWLClass());
+		assertTrue(entity.isOWLClass());
 		OWLClass owlClass = entity.asOWLClass();
-		Assert.assertEquals(1, Searcher.sup(ontology.subClassAxiomsForSubClass(owlClass)).count());
+		assertEquals(1, Searcher.sup(ontology.subClassAxiomsForSubClass(owlClass)).count());
 		Set<OWLClassAxiom> axioms = ontology.getAxioms(owlClass, Imports.INCLUDED);
-		Assert.assertEquals("SubClassOf", axioms.iterator().next().getAxiomType().getName());
+		assertEquals("SubClassOf", axioms.iterator().next().getAxiomType().getName());
 	}
 
 	@Test
@@ -297,40 +301,40 @@ public class SlimmerTest {
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
-		Assert.assertNotNull(irisToSave);
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertNotNull(irisToSave);
+		assertEquals(1, conf.getTreePartsToSave().size());
 
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("uo.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(3203, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertEquals(3203, ontology.getAxiomCount());
 
 		// test the removing; should result in exactly one less axiom
 		slimmer.removeAllExcept(irisToSave);
 		ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(68, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertEquals(68, ontology.getAxiomCount());
 	}
 
 	@Test
 	public void testRemoveDeclaredProperties() throws Exception {
 		Configuration conf = new Configuration();
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
-		Assert.assertNotNull(irisToSave);
-		Assert.assertEquals(0, conf.getTreePartsToSave().size());
+		assertNotNull(irisToSave);
+		assertEquals(0, conf.getTreePartsToSave().size());
 
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("uo.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(3203, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertEquals(3203, ontology.getAxiomCount());
 
 		// test the removing; should result in exactly one less axiom
 		slimmer.removeAllExcept(irisToSave);
 		ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(67, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertEquals(67, ontology.getAxiomCount());
 	}
 
 	@Test
@@ -339,20 +343,20 @@ public class SlimmerTest {
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
 		Set<Instruction> irisToSave = conf.getTreePartsToSave();
-		Assert.assertNotNull(irisToSave);
-		Assert.assertEquals(1, conf.getTreePartsToSave().size());
+		assertNotNull(irisToSave);
+		assertEquals(1, conf.getTreePartsToSave().size());
 
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bao_core.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(899, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertEquals(899, ontology.getAxiomCount());
 
 		// test the removing; should result in exactly one less axiom
 		slimmer.removeAllExcept(irisToSave);
 		ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(46, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertEquals(46, ontology.getAxiomCount());
 	}
 
 	@Test
@@ -360,19 +364,19 @@ public class SlimmerTest {
 		String test = "-:http://www.bioassayontology.org/bao#BAO_0000335";
 		Configuration conf = new Configuration();
 		conf.read(new StringReader(test));
-		Assert.assertEquals(1, conf.getTreePartsToRemove().size());
+		assertEquals(1, conf.getTreePartsToRemove().size());
 
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("bao_core.owl");
 		Slimmer slimmer = new Slimmer(stream);
 		OWLOntology ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(899, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertEquals(899, ontology.getAxiomCount());
 
 		// test the removing; should result in exactly one less axiom
 		slimmer.removeAll(conf.getTreePartsToRemove());
 		ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(895, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertEquals(895, ontology.getAxiomCount());
 	}
 
 	@Test
@@ -385,13 +389,13 @@ public class SlimmerTest {
 		OWLOntology ontology = slimmer.getOntology();
 		slimmer.removeAllExcept(irisToSave);
 		ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(67, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertEquals(67, ontology.getAxiomCount());
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		slimmer.saveAs(output, ontoFile);
 		String owlOutput = output.toString();
 		System.out.println(owlOutput);
-		Assert.assertTrue(owlOutput.contains("xmlns:ncicp"));
+		assertTrue(owlOutput.contains("xmlns:ncicp"));
 	}
 
 	@Test
@@ -404,12 +408,12 @@ public class SlimmerTest {
 		OWLOntology ontology = slimmer.getOntology();
 		slimmer.removeAllExcept(irisToSave);
 		ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(67, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertEquals(67, ontology.getAxiomCount());
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		slimmer.saveAs(output, ontoFile);
 		String owlOutput = output.toString();
-		Assert.assertTrue(owlOutput.contains("This SLIM file"));
+		assertTrue(owlOutput.contains("This SLIM file"));
 	}
 
 	@Test
@@ -422,12 +426,12 @@ public class SlimmerTest {
 		OWLOntology ontology = slimmer.getOntology();
 		slimmer.removeAllExcept(irisToSave);
 		ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(67, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertEquals(67, ontology.getAxiomCount());
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		slimmer.saveAs(output, ontoFile);
 		String owlOutput = output.toString();
-		Assert.assertTrue(owlOutput.contains("pav:importedFrom"));
+		assertTrue(owlOutput.contains("pav:importedFrom"));
 	}
 
 	@Test
@@ -440,12 +444,12 @@ public class SlimmerTest {
 		OWLOntology ontology = slimmer.getOntology();
 		slimmer.removeAllExcept(irisToSave);
 		ontology = slimmer.getOntology();
-		Assert.assertNotNull(ontology);
-		Assert.assertEquals(67, ontology.getAxiomCount());
+		assertNotNull(ontology);
+		assertEquals(67, ontology.getAxiomCount());
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		slimmer.saveAs(output, ontoFile);
 		String owlOutput = output.toString();
 		System.out.println("Output: " + owlOutput);
-		Assert.assertTrue("Did not find the generation data.", owlOutput.contains(">2019-")); // TODO: update every year :)
+		assertTrue(owlOutput.contains(">2021-"), "Did not find the generation data."); // TODO: update every year :)
 	}
 }
