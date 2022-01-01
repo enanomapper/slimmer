@@ -1,9 +1,10 @@
-cff-version: 1.1.0
+cff-version: 1.2.0
 message: If you use this tool, please cite the software version and the eNanoMapper ontology article.
 title: "Slimmer 1.0.2"
 version: 1.0.2
 doi: 10.5281/zenodo.4546421
-reference:
+url: https://github.com/enanomapper/slimmer/
+preferred-citation:
   - type: article
     authors:
       -
