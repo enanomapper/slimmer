@@ -450,6 +450,6 @@ public class SlimmerTest {
 		slimmer.saveAs(output, ontoFile);
 		String owlOutput = output.toString();
 		System.out.println("Output: " + owlOutput);
-		assertTrue(owlOutput.contains(">2021-"), "Did not find the generation data."); // TODO: update every year :)
+		assertTrue(owlOutput.contains(">2022-"), "Did not find the generation data."); // TODO: update every year :)
 	}
 }
