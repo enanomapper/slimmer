@@ -58,6 +58,8 @@ Funding
 The project has had contributions from various European Commission projects. The
 [eNanoMapper](http://enanomapper.net/) project was funded by the European Union’s Seventh
 Framework Programme for research, technological development and demonstration
-(FP7-NMP-2013-SMALL-7) under grant agreement no. [604134](https://cordis.europa.eu/project/rcn/110961/factsheet/en).
+(FP7-NMP-2013-SMALL-7) under grant agreement no. [604134](https://cordis.europa.eu/project/id/604134).
 [NanoCommons](https://www.nanocommons.eu/) has received funding from European Union Horizon
-2020 Programme (H2020) under grant agreement nº [731032](https://cordis.europa.eu/project/rcn/212586/factsheet/en).
+2020 Programme (H2020) under grant agreement nº [731032](https://cordis.europa.eu/project/id/731032).
+[NanoSolveIt](https://nanosolveit.eu/) has received funding from European Union Horizon 2020 Programme (H2020) under grant agreement no.
+[814572](https://cordis.europa.eu/project/id/814572).
